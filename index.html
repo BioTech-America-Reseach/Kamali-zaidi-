@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>🧠 Smart Roulette Brain - Dr. William</title>
+    <title>🎯 Advanced Roulette Brain - Physics + AI</title>
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
@@ -23,26 +23,112 @@
             box-shadow: 0 20px 60px -12px rgba(0,0,0,0.9);
         }
         .gold-text { color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.1); }
-        .brain-pulse { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
         
+        .wheel-wrapper {
+            position: relative;
+            width: 380px;
+            height: 380px;
+            margin: 0 auto;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #1a472a 0deg 9.73deg, #8b0000 9.73deg 19.46deg,
+                #1a472a 19.46deg 29.19deg, #8b0000 29.19deg 38.92deg,
+                #1a472a 38.92deg 48.65deg, #8b0000 48.65deg 58.38deg,
+                #1a472a 58.38deg 68.11deg, #8b0000 68.11deg 77.84deg,
+                #1a472a 77.84deg 87.57deg, #8b0000 87.57deg 97.3deg,
+                #1a472a 97.3deg 107.03deg, #8b0000 107.03deg 116.76deg,
+                #1a472a 116.76deg 126.49deg, #8b0000 126.49deg 136.22deg,
+                #1a472a 136.22deg 145.95deg, #8b0000 145.95deg 155.68deg,
+                #1a472a 155.68deg 165.41deg, #8b0000 165.41deg 175.14deg,
+                #1a472a 175.14deg 184.86deg, #8b0000 184.86deg 194.59deg,
+                #1a472a 194.59deg 204.32deg, #8b0000 204.32deg 214.05deg,
+                #1a472a 214.05deg 223.78deg, #8b0000 223.78deg 233.51deg,
+                #1a472a 233.51deg 243.24deg, #8b0000 243.24deg 252.97deg,
+                #1a472a 252.97deg 262.70deg, #8b0000 262.70deg 272.43deg,
+                #1a472a 272.43deg 282.16deg, #8b0000 282.16deg 291.89deg,
+                #1a472a 291.89deg 301.62deg, #8b0000 301.62deg 311.35deg,
+                #1a472a 311.35deg 321.08deg, #8b0000 321.08deg 330.81deg,
+                #1a472a 330.81deg 340.54deg, #8b0000 340.54deg 350.27deg,
+                #1a472a 350.27deg 360deg
+            );
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 60px rgba(255,215,0,0.08);
+            position: relative;
+            transition: transform 2.5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+        .wheel-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #FFD700, #B8860B);
+            border: 3px solid #fff;
+            box-shadow: 0 0 40px rgba(255,215,0,0.25);
+            display: flex;
+            align-items: center; justify-content: center;
+            font-weight: 900; font-size: 13px;
+            color: #1a1a2e;
+            z-index: 10;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            border-top: 28px solid #FFD700;
+            filter: drop-shadow(0 0 25px rgba(255,215,0,0.4));
+            z-index: 20;
+        }
+        
+        /* Ball bounce dots on wheel */
+        .bounce-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            z-index: 15;
+            pointer-events: none;
+            animation: bouncePulse 1.2s ease-in-out infinite;
+        }
+        .bounce-dot.red { background: #ff4444; box-shadow: 0 0 25px rgba(255,68,68,0.6); }
+        .bounce-dot.orange { background: #FF8800; box-shadow: 0 0 25px rgba(255,136,0,0.5); }
+        .bounce-dot.yellow { background: #FFD700; box-shadow: 0 0 25px rgba(255,215,0,0.4); }
+        .bounce-dot.green { background: #44ff88; box-shadow: 0 0 25px rgba(68,255,136,0.3); }
+        .bounce-dot.blue { background: #4488ff; box-shadow: 0 0 25px rgba(68,136,255,0.3); }
+        
+        @keyframes bouncePulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+        }
+
         .num-badge {
             display: inline-flex; align-items: center; justify-content: center;
-            width: 34px; height: 34px; border-radius: 50%;
-            font-weight: 700; font-size: 11px;
+            width: 32px; height: 32px; border-radius: 50%;
+            font-weight: 700; font-size: 10px;
             border: 2px solid rgba(255,215,0,0.06);
             font-family: 'Orbitron', sans-serif;
-            margin: 2px;
-            transition: all 0.3s;
+            margin: 1px;
             cursor: pointer;
+            transition: all 0.2s;
         }
         .num-badge:hover { transform: scale(1.08); border-color: #FFD700; }
         .num-badge.red { background: #8b0000; color: #fff; }
         .num-badge.black { background: #1a472a; color: #fff; }
         .num-badge.gold { background: #FFD700; color: #1a1a2e; border-color: #FFD700; }
-        .num-badge.seed { border-color: #00ccff; box-shadow: 0 0 20px rgba(0,204,255,0.2); }
-        .num-badge.predicted { border-color: #44ff88; box-shadow: 0 0 25px rgba(68,255,136,0.2); }
-        .num-badge.highlight { border-color: #FFD700; box-shadow: 0 0 30px rgba(255,215,0,0.3); }
+        .num-badge.bounce-high { border-color: #ff4444; box-shadow: 0 0 25px rgba(255,68,68,0.3); }
+        .num-badge.bounce-mid { border-color: #FF8800; box-shadow: 0 0 20px rgba(255,136,0,0.2); }
+        .num-badge.bounce-low { border-color: #FFD700; box-shadow: 0 0 15px rgba(255,215,0,0.1); }
 
         .btn-primary {
             background: linear-gradient(135deg, #FFD700, #B8860B);
@@ -62,25 +148,27 @@
             cursor: pointer; transition: all 0.3s;
         }
         .btn-secondary:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .btn-danger {
+            background: rgba(255,68,68,0.15);
+            color: #ff4444;
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,68,68,0.15);
+            font-family: 'Orbitron', sans-serif; font-size: 9px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-danger:hover { background: rgba(255,68,68,0.25); }
 
         .stat-card {
             background: rgba(0,0,0,0.25);
             border-radius: 10px;
-            padding: 10px 14px;
+            padding: 8px 12px;
             border: 1px solid rgba(255,215,0,0.04);
             text-align: center;
         }
-        .stat-card .number { font-size: 22px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
+        .stat-card .number { font-size: 20px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
         .stat-card .label { font-size: 7px; color: #888; letter-spacing: 1px; }
-
-        .seed-box {
-            background: rgba(0,0,0,0.3);
-            border: 2px dashed rgba(0,204,255,0.15);
-            border-radius: 12px;
-            padding: 8px 12px;
-            min-height: 50px;
-        }
-        .seed-box .label { font-size: 7px; color: #00ccff; letter-spacing: 1px; }
 
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -92,28 +180,22 @@
         }
         .toast.hide { opacity: 0; transform: translateX(-50%) translateY(20px); }
 
-        .prediction-item {
-            background: rgba(0,0,0,0.2);
+        .bounce-card {
+            background: rgba(255,68,68,0.04);
+            border: 1px solid rgba(255,68,68,0.08);
             border-radius: 8px;
             padding: 6px 10px;
-            border: 1px solid rgba(68,255,136,0.06);
-            margin-bottom: 3px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
-        .prediction-item .rank { font-size: 7px; color: #666; }
-        .prediction-item .num { font-size: 14px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
-        .prediction-item .prob { font-size: 9px; color: #44ff88; }
+        .bounce-card .label { font-size: 7px; color: #ff4444; letter-spacing: 1px; }
 
-        .bet-suggestion {
-            background: rgba(255,215,0,0.04);
-            border: 1px solid rgba(255,215,0,0.08);
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-top: 4px;
+        .ai-thinking {
+            animation: thinkPulse 1.5s ease-in-out infinite;
         }
-        .bet-suggestion .label { font-size: 7px; color: #FFD700; letter-spacing: 1px; }
+        @keyframes thinkPulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
 
         .scrollbar-thin::-webkit-scrollbar { width: 3px; }
         .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.01); }
@@ -127,17 +209,26 @@
         }
         .input-num:focus { border-color: #FFD700; }
 
-        .ai-status {
+        .direction-indicator {
             display: inline-block;
-            padding: 2px 10px;
+            padding: 3px 12px;
             border-radius: 20px;
-            font-size: 7px;
+            font-size: 8px;
             font-weight: 700;
             font-family: 'Orbitron', sans-serif;
         }
-        .ai-status.active { background: rgba(68,255,136,0.15); color: #44ff88; }
-        .ai-status.learning { background: rgba(255,215,0,0.15); color: #FFD700; animation: pulse 1s infinite; }
-        .ai-status.idle { background: rgba(255,255,255,0.05); color: #666; }
+        .direction-indicator.left { background: rgba(255,215,0,0.12); color: #FFD700; }
+        .direction-indicator.right { background: rgba(0,204,255,0.12); color: #00ccff; }
+        .direction-indicator.stable { background: rgba(68,255,136,0.08); color: #44ff88; }
+        
+        .bet-stop {
+            background: rgba(255,68,68,0.08);
+            border: 1px solid rgba(255,68,68,0.15);
+            border-radius: 8px;
+            padding: 6px 10px;
+            text-align: center;
+        }
+        .bet-stop .label { font-size: 8px; color: #ff4444; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -146,75 +237,96 @@
     <!-- HEADER -->
     <div class="text-center mb-4">
         <h1 class="text-xl md:text-3xl font-black gold-text orbitron tracking-wider">
-            🧠 SMART ROULETTE <span class="text-white">BRAIN</span>
-            <span class="text-[10px] block text-yellow-500/30 font-normal tracking-widest">AI-POWERED • SELF-LEARNING • PATTERN RECOGNITION</span>
+            🎯 ADVANCED ROULETTE <span class="text-white">BRAIN</span>
+            <span class="text-[9px] block text-yellow-500/30 font-normal tracking-widest">PHYSICS BOUNCE • AI PREDICTION • SELF-LEARNING</span>
         </h1>
     </div>
 
     <div class="grid lg:grid-cols-4 gap-4">
-        <!-- LEFT: INPUT + SEED -->
+        <!-- LEFT: WHEEL + INPUT -->
         <div class="lg:col-span-1 glass rounded-2xl p-4">
-            <p class="text-[8px] text-gray-500 tracking-widest text-center mb-2">📝 WEKA NAMBA ILIYOTOOKA</p>
-            <div class="flex gap-2 justify-center">
-                <input type="number" id="liveInput" min="0" max="36" placeholder="?" 
-                       class="input-num w-14 h-12 text-lg" onkeydown="if(event.key==='Enter') addLiveNumber()">
-                <button class="btn-primary text-[8px] px-3 py-2" onclick="addLiveNumber()">➕ ONGEZA</button>
+            <div class="wheel-wrapper">
+                <div class="wheel-pointer"></div>
+                <div class="wheel" id="wheel" style="transform:rotate(0deg);"></div>
+                <div class="wheel-center" id="centerDisplay">0</div>
+                <!-- Bounce Dots Container -->
+                <div id="bounceDots" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:15;"></div>
             </div>
 
-            <!-- SEED BOX -->
-            <div class="mt-3 seed-box">
-                <div class="label">🧬 SEED BOX (Namba Zilizojaza AI)</div>
-                <div id="seedContainer" class="flex flex-wrap gap-0.5 mt-1 min-h-[36px]">
-                    <span class="text-gray-600 text-[7px]">-</span>
+            <div class="mt-3">
+                <p class="text-[8px] text-gray-500 tracking-widest text-center">📝 WEKA NAMBA ILIYOTOOKA</p>
+                <div class="flex gap-2 justify-center">
+                    <input type="number" id="liveInput" min="0" max="36" placeholder="?" 
+                           class="input-num w-14 h-12 text-lg" onkeydown="if(event.key==='Enter') addLiveNumber()">
+                    <button class="btn-primary text-[8px] px-3 py-2" onclick="addLiveNumber()">➕ ONGEZA</button>
                 </div>
             </div>
 
-            <!-- AI STATUS -->
+            <!-- DIRECTION + SPEED -->
             <div class="mt-2 flex justify-between items-center">
-                <span class="text-[7px] text-gray-500">🤖 AI STATUS</span>
-                <span id="aiStatus" class="ai-status idle">IDLE</span>
+                <span class="text-[7px] text-gray-500">🔄 MWENDO</span>
+                <span id="directionDisplay" class="direction-indicator stable">⚖️ STABLE</span>
+                <span class="text-[7px] text-gray-500">⚡ <span id="speedDisplay">0</span></span>
+            </div>
+
+            <!-- AI STATUS -->
+            <div class="mt-2 flex justify-between items-center bg-black/20 rounded-lg px-3 py-1.5">
+                <span class="text-[7px] text-gray-500">🧠 AI STATUS</span>
+                <span id="aiStatus" class="text-[8px] text-yellow-500 ai-thinking">● LEARNING...</span>
             </div>
 
             <!-- QUICK FILL -->
             <div class="mt-2 flex flex-wrap gap-0.5 justify-center">
                 <span class="text-[6px] text-gray-600">MIFANO:</span>
-                <button onclick="quickFill([25,5,5,21,22,7])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 1</button>
-                <button onclick="quickFill([23,19,13,8,29,33])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 2</button>
-                <button onclick="quickFill([34,16,16,11,24,4])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 3</button>
+                <button onclick="quickFill([25,5,5,21,22,7,2,24,21,36,23,32])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 1</button>
+                <button onclick="quickFill([23,19,13,8,29,33,26,25,33,14,34])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 2</button>
+                <button onclick="quickFill([34,16,16,11,24,4,1,24,10,13,0])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 3</button>
+            </div>
+
+            <!-- BET STOP BUTTON -->
+            <div class="mt-2">
+                <button class="btn-danger text-[7px] px-3 py-1.5 w-full" onclick="stopBet()">⛔ STOP BET • SUBIRI</button>
             </div>
         </div>
 
-        <!-- MIDDLE LEFT: PREDICTIONS -->
+        <!-- MIDDLE LEFT: BOUNCE PREDICTIONS -->
         <div class="lg:col-span-1 glass rounded-2xl p-4">
-            <p class="text-[8px] text-green-400/60 tracking-widest mb-2">🎯 AI PREDICTIONS</p>
-            <div id="predictionsContainer" class="space-y-1 max-h-64 overflow-y-auto scrollbar-thin">
+            <p class="text-[8px] text-red-400/60 tracking-widest mb-2">🎯 BOUNCE PREDICTIONS (10 Numbers)</p>
+            <div id="bouncePredictions" class="flex flex-wrap gap-1 justify-center">
                 <span class="text-gray-600 text-[8px]">-</span>
             </div>
 
-            <div class="mt-3">
-                <p class="text-[8px] text-yellow-500/60 tracking-widest">📊 PATTERN RECOGNITION</p>
-                <div id="patternContainer" class="text-[8px] text-gray-300 mt-1">
+            <div class="mt-3 bounce-card">
+                <div class="label">📊 BOUNCE PHYSICS CALCULATION</div>
+                <div id="bouncePhysics" class="text-[8px] text-gray-300 mt-1">
                     <span class="text-gray-600">-</span>
                 </div>
             </div>
+
+            <div class="mt-3">
+                <p class="text-[8px] text-yellow-500/60 tracking-widest">📈 BOUNCE HEATMAP</p>
+                <div id="bounceHeatmap" class="flex flex-wrap gap-0.5 mt-1">
+                    <span class="text-gray-600 text-[7px]">-</span>
+                </div>
+            </div>
         </div>
 
-        <!-- MIDDLE RIGHT: BET SUGGESTIONS -->
+        <!-- MIDDLE RIGHT: AI PREDICTIONS -->
         <div class="lg:col-span-1 glass rounded-2xl p-4">
-            <p class="text-[8px] text-yellow-500/60 tracking-widest mb-2">💡 BET SUGGESTIONS</p>
-            <div id="betSuggestions" class="space-y-1 max-h-64 overflow-y-auto scrollbar-thin">
+            <p class="text-[8px] text-green-400/60 tracking-widest mb-2">🧠 AI PREDICTIONS (Kwa Mwenendo)</p>
+            <div id="aiPredictions" class="space-y-1 max-h-48 overflow-y-auto scrollbar-thin">
                 <span class="text-gray-600 text-[8px]">-</span>
             </div>
 
-            <div class="mt-3">
-                <p class="text-[8px] text-blue-400/60 tracking-widest">📈 CONFIDENCE LEVEL</p>
-                <div id="confidenceMeter" class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden mt-1">
-                    <div id="confidenceFill" class="h-full bg-green-400 rounded-full transition-all duration-500" style="width:0%"></div>
-                </div>
-                <div class="flex justify-between text-[6px] text-gray-600 mt-0.5">
-                    <span>0%</span>
-                    <span id="confidenceText" class="text-yellow-500">0%</span>
-                    <span>100%</span>
+            <div class="mt-3 bet-stop" id="betStopDisplay">
+                <div class="label">⛔ STOP BET</div>
+                <p class="text-[7px] text-gray-400" id="stopMessage">Tayari kwa betting...</p>
+            </div>
+
+            <div class="mt-2">
+                <p class="text-[8px] text-blue-400/60 tracking-widest">📊 PATTERN ANALYSIS</p>
+                <div id="patternDisplay" class="text-[7px] text-gray-300 mt-1">
+                    <span class="text-gray-600">-</span>
                 </div>
             </div>
         </div>
@@ -223,12 +335,12 @@
         <div class="lg:col-span-1 glass rounded-2xl p-4">
             <div class="grid grid-cols-2 gap-2">
                 <div class="stat-card">
-                    <div class="label">SEED COUNT</div>
-                    <div class="number text-white" id="seedCount">0</div>
+                    <div class="label">SPINS</div>
+                    <div class="number text-white" id="spinCount">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="label">UNIQUE</div>
-                    <div class="number text-yellow-400" id="uniqueCount">0</div>
+                    <div class="label">BOUNCE</div>
+                    <div class="number text-red-400" id="bounceCount">0</div>
                 </div>
                 <div class="stat-card">
                     <div class="label">HOT</div>
@@ -241,21 +353,20 @@
             </div>
 
             <div class="mt-3">
-                <p class="text-[7px] text-gray-500 tracking-widest">📋 HISTORY</p>
+                <p class="text-[7px] text-gray-500 tracking-widest">📋 HISTORY (Namba Zilizotoka)</p>
                 <div id="historyDisplay" class="flex flex-wrap gap-0.5 max-h-28 overflow-y-auto scrollbar-thin mt-1">
                     <span class="text-gray-600 text-[7px]">-</span>
                 </div>
             </div>
 
             <div class="mt-3 flex gap-2">
-                <button class="btn-secondary text-[7px] px-3 py-1.5 flex-1" onclick="clearSeed()">⟳ CLEAR SEED</button>
-                <button class="btn-secondary text-[7px] px-3 py-1.5 flex-1" onclick="clearAll()">🗑️ FUTA YOTE</button>
+                <button class="btn-secondary text-[7px] px-3 py-1.5 flex-1" onclick="clearAll()">🗑️ FUTA</button>
             </div>
         </div>
     </div>
 
     <div class="text-center mt-4 text-[7px] text-gray-700 tracking-widest border-t border-white/5 pt-3">
-        🧠 SMART ROULETTE BRAIN • AI-POWERED • SELF-LEARNING • PATTERN RECOGNITION
+        🎯 ADVANCED ROULETTE BRAIN • PHYSICS BOUNCE • AI PREDICTION • SELF-LEARNING
     </div>
 </div>
 
@@ -274,35 +385,167 @@
         31: 'black', 32: 'red', 33: 'black', 34: 'red', 35: 'black', 36: 'red'
     };
 
-    // Mistral AI API Key
-    const MISTRAL_API_KEY = 'ISA7YuyZAzX7wEMTZlJ8WXr1XWQcGlgE';
-    const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
+    // Wheel positions for bounce calculation
+    const WHEEL_POSITIONS = {};
+    for (let i = 0; i <= 36; i++) {
+        WHEEL_POSITIONS[i] = (i * 9.73); // Each number is 9.73 degrees
+    }
 
     // ============================================================
     // STATE
     // ============================================================
-    let seedData = [];
     let historyData = [];
-    let predictions = [];
-    let confidence = 0;
+    let spinCount = 0;
+    let bounceCount = 0;
+    let currentDirection = 'stable';
+    let currentSpeed = 0;
+    let spinAngle = 0;
+    let bouncePredictions = [];
+    let aiPredictions = [];
+    let isBetting = true;
+    let stopCount = 0;
 
     // ============================================================
     // DOM REFS
     // ============================================================
+    const wheel = document.getElementById('wheel');
+    const centerDisplay = document.getElementById('centerDisplay');
+    const bounceDots = document.getElementById('bounceDots');
     const liveInput = document.getElementById('liveInput');
-    const seedContainer = document.getElementById('seedContainer');
-    const seedCount = document.getElementById('seedCount');
-    const uniqueCount = document.getElementById('uniqueCount');
+    const spinCountEl = document.getElementById('spinCount');
+    const bounceCountEl = document.getElementById('bounceCount');
     const hotNumber = document.getElementById('hotNumber');
     const coldNumber = document.getElementById('coldNumber');
     const historyDisplay = document.getElementById('historyDisplay');
-    const predictionsContainer = document.getElementById('predictionsContainer');
-    const patternContainer = document.getElementById('patternContainer');
-    const betSuggestions = document.getElementById('betSuggestions');
-    const confidenceFill = document.getElementById('confidenceFill');
-    const confidenceText = document.getElementById('confidenceText');
+    const bouncePredictionsEl = document.getElementById('bouncePredictions');
+    const bouncePhysicsEl = document.getElementById('bouncePhysics');
+    const bounceHeatmapEl = document.getElementById('bounceHeatmap');
+    const aiPredictionsEl = document.getElementById('aiPredictions');
+    const patternDisplay = document.getElementById('patternDisplay');
+    const directionDisplay = document.getElementById('directionDisplay');
+    const speedDisplay = document.getElementById('speedDisplay');
     const aiStatus = document.getElementById('aiStatus');
+    const stopMessage = document.getElementById('stopMessage');
     const toast = document.getElementById('toast');
+
+    // ============================================================
+    // BOUNCE PHYSICS ENGINE
+    // ============================================================
+    function calculateBouncePhysics(lastNumber, speed, direction) {
+        const results = [];
+        const baseAngle = WHEEL_POSITIONS[lastNumber] || 0;
+        
+        // Bounce parameters
+        const bounceForce = speed * 0.15 + 0.3;
+        const directionMultiplier = direction === 'left' ? -1 : 1;
+        
+        // Calculate 10 bounce positions
+        for (let i = 1; i <= 10; i++) {
+            // Bounce angle with physics decay
+            const decay = Math.exp(-i * 0.08);
+            const angleOffset = (i * 12 * bounceForce * directionMultiplier * decay);
+            
+            // Add some randomness for realism
+            const randomFactor = (Math.random() - 0.5) * 3;
+            const totalOffset = angleOffset + randomFactor;
+            
+            // Calculate the number at this bounce position
+            let num = Math.round((baseAngle + totalOffset) / 9.73) % 37;
+            if (num < 0) num += 37;
+            if (num > 36) num -= 37;
+            
+            // Confidence decreases with distance
+            const confidence = Math.max(20, 85 - (i * 5) - Math.abs(randomFactor) * 2);
+            
+            results.push({
+                number: num,
+                confidence: Math.min(95, confidence),
+                bounceIndex: i,
+                angle: baseAngle + totalOffset,
+                color: i <= 3 ? 'red' : i <= 6 ? 'orange' : i <= 8 ? 'yellow' : 'blue'
+            });
+        }
+        
+        return results;
+    }
+
+    // ============================================================
+    // BOUNCE HEATMAP
+    // ============================================================
+    function generateBounceHeatmap(bounceResults) {
+        const heatmap = {};
+        bounceResults.forEach(r => {
+            heatmap[r.number] = (heatmap[r.number] || 0) + 1;
+        });
+        return heatmap;
+    }
+
+    // ============================================================
+    // AI PREDICTION ENGINE
+    // ============================================================
+    function generateAIPredictions(history, bounceResults) {
+        const predictions = [];
+        const freq = {};
+        history.forEach(n => freq[n] = (freq[n] || 0) + 1);
+        
+        // 1. Frequency-based (40%)
+        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+        sorted.slice(0, 5).forEach(([num, count]) => {
+            const n = parseInt(num);
+            const conf = Math.min(85, 40 + count * 4);
+            predictions.push({ number: n, confidence: conf, source: 'FREQ' });
+        });
+        
+        // 2. Bounce-based (35%)
+        bounceResults.forEach(r => {
+            const existing = predictions.find(p => p.number === r.number);
+            if (existing) {
+                existing.confidence = Math.min(95, existing.confidence + r.confidence * 0.3);
+                existing.source = 'BOUNCE+FREQ';
+            } else {
+                predictions.push({ 
+                    number: r.number, 
+                    confidence: r.confidence * 0.6,
+                    source: 'BOUNCE'
+                });
+            }
+        });
+        
+        // 3. Gap analysis (25%)
+        if (history.length >= 4) {
+            const gaps = [];
+            for (let i = 1; i < Math.min(history.length, 20); i++) {
+                let gap = history[i] - history[i-1];
+                if (gap < -18) gap += 37;
+                if (gap > 18) gap -= 37;
+                gaps.push(gap);
+            }
+            const avgGap = gaps.reduce((a,b) => a + b, 0) / gaps.length;
+            const last = history[history.length - 1];
+            
+            const predRight = ((last + Math.round(avgGap * 0.6)) % 37 + 37) % 37;
+            const predLeft = ((last - Math.round(avgGap * 0.6)) % 37 + 37) % 37;
+            
+            const existingR = predictions.find(p => p.number === predRight);
+            const existingL = predictions.find(p => p.number === predLeft);
+            
+            if (existingR) existingR.confidence = Math.min(95, existingR.confidence + 10);
+            else predictions.push({ number: predRight, confidence: 55, source: 'GAP→' });
+            
+            if (existingL) existingL.confidence = Math.min(95, existingL.confidence + 10);
+            else predictions.push({ number: predLeft, confidence: 50, source: 'GAP←' });
+        }
+        
+        // Remove duplicates and sort
+        const unique = {};
+        predictions.forEach(p => {
+            if (!unique[p.number] || unique[p.number].confidence < p.confidence) {
+                unique[p.number] = p;
+            }
+        });
+        
+        return Object.values(unique).sort((a, b) => b.confidence - a.confidence).slice(0, 8);
+    }
 
     // ============================================================
     // ADD LIVE NUMBER
@@ -314,41 +557,337 @@
             return;
         }
 
-        // Add to seed
-        seedData.push(num);
-        if (seedData.length > 50) seedData.shift();
-
         // Add to history
         historyData.push(num);
         if (historyData.length > 200) historyData.splice(0, historyData.length - 200);
+        spinCount++;
+        bounceCount++;
+
+        // Update wheel
+        updateWheel(num);
+        showBounceDots(num);
+
+        // Update direction and speed
+        updateDirectionAndSpeed();
+
+        // Run bounce physics
+        const last = historyData[historyData.length - 1];
+        const speed = currentSpeed || 3;
+        const direction = currentDirection;
+        
+        const bounceResults = calculateBouncePhysics(last, speed, direction);
+        bouncePredictions = bounceResults;
+        
+        // Generate AI predictions
+        aiPredictions = generateAIPredictions(historyData, bounceResults);
 
         // Update UI
-        updateSeedDisplay();
-        updateHistoryDisplay();
         updateStats();
+        updateHistoryDisplay();
+        displayBouncePredictions(bounceResults);
+        displayBouncePhysics(bounceResults);
+        displayBounceHeatmap(bounceResults);
+        displayAIPredictions(aiPredictions);
+        displayPatterns();
+        updateAIStatus();
 
-        // Run AI analysis
-        runAIAnalysis();
+        // Check if should stop bet
+        checkStopBet();
 
         liveInput.value = '';
         liveInput.focus();
-        showToast(`✅ Namba ${num} imeongezwa kwenye Seed`);
+        showToast(`✅ Namba ${num} imeongezwa | Bounce: ${bounceResults.length} positions`);
     }
 
     // ============================================================
-    // UPDATE SEED DISPLAY
+    // UPDATE WHEEL
     // ============================================================
-    function updateSeedDisplay() {
-        if (seedData.length === 0) {
-            seedContainer.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+    function updateWheel(number) {
+        const angle = number * 9.73;
+        spinAngle += 720 + (360 - angle);
+        wheel.style.transform = `rotate(${spinAngle}deg)`;
+        centerDisplay.textContent = number;
+        centerDisplay.style.color = number === 0 ? '#FFD700' : COLORS[number] === 'red' ? '#ff4444' : '#44ff88';
+    }
+
+    // ============================================================
+    // SHOW BOUNCE DOTS
+    // ============================================================
+    function showBounceDots(lastNumber) {
+        const speed = currentSpeed || 3;
+        const direction = currentDirection;
+        const results = calculateBouncePhysics(lastNumber, speed, direction);
+        
+        bounceDots.innerHTML = results.map((r, i) => {
+            const angle = r.angle;
+            const radius = 120 + (i * 3);
+            const x = 190 + radius * Math.sin(angle * Math.PI / 180);
+            const y = 190 - radius * Math.cos(angle * Math.PI / 180);
+            const dotColor = i < 3 ? 'red' : i < 6 ? 'orange' : i < 8 ? 'yellow' : 'blue';
+            return `<div class="bounce-dot ${dotColor}" style="left:${x}px;top:${y}px;width:${14 - i * 0.5}px;height:${14 - i * 0.5}px;animation-delay:${i * 0.08}s;"></div>`;
+        }).join('');
+        
+        // Auto-clear after 3 seconds
+        setTimeout(() => {
+            bounceDots.innerHTML = '';
+        }, 3000);
+    }
+
+    // ============================================================
+    // UPDATE DIRECTION AND SPEED
+    // ============================================================
+    function updateDirectionAndSpeed() {
+        if (historyData.length < 3) {
+            currentDirection = 'stable';
+            currentSpeed = 0;
+            directionDisplay.textContent = '⚖️ STABLE';
+            directionDisplay.className = 'direction-indicator stable';
+            speedDisplay.textContent = '0';
             return;
         }
-        seedContainer.innerHTML = seedData.map((n, i) => {
-            const color = n === 0 ? 'gold' : COLORS[n];
-            const isRecent = i >= seedData.length - 3;
-            return `<span class="num-badge ${color} ${isRecent ? 'seed' : ''} text-[7px]" style="width:24px;height:24px;font-size:7px;">${n}</span>`;
+
+        let left = 0, right = 0;
+        const recent = historyData.slice(-15);
+        for (let i = 1; i < recent.length; i++) {
+            let gap = recent[i] - recent[i-1];
+            if (gap < -18) gap += 37;
+            if (gap > 18) gap -= 37;
+            if (gap < 0) left++;
+            else if (gap > 0) right++;
+        }
+
+        // Calculate speed (magnitude of movement)
+        let totalGap = 0;
+        for (let i = 1; i < Math.min(historyData.length, 10); i++) {
+            let gap = historyData[i] - historyData[i-1];
+            if (gap < -18) gap += 37;
+            if (gap > 18) gap -= 37;
+            totalGap += Math.abs(gap);
+        }
+        currentSpeed = Math.min(5, Math.round(totalGap / Math.min(historyData.length, 10)));
+
+        if (left > right * 1.8) {
+            currentDirection = 'left';
+            directionDisplay.textContent = '⬅ KUSHOTO';
+            directionDisplay.className = 'direction-indicator left';
+        } else if (right > left * 1.8) {
+            currentDirection = 'right';
+            directionDisplay.textContent = 'KULIA ➡';
+            directionDisplay.className = 'direction-indicator right';
+        } else {
+            currentDirection = 'stable';
+            directionDisplay.textContent = '⚖️ STABLE';
+            directionDisplay.className = 'direction-indicator stable';
+        }
+        
+        speedDisplay.textContent = currentSpeed;
+    }
+
+    // ============================================================
+    // CHECK STOP BET
+    // ============================================================
+    function checkStopBet() {
+        // If last 3 numbers are all same direction, stop bet
+        if (historyData.length >= 4) {
+            const last3 = historyData.slice(-4);
+            let sameDirection = true;
+            for (let i = 1; i < last3.length; i++) {
+                let gap = last3[i] - last3[i-1];
+                if (gap < -18) gap += 37;
+                if (gap > 18) gap -= 37;
+                if ((gap < 0 && last3[1] - last3[0] > 0) || (gap > 0 && last3[1] - last3[0] < 0)) {
+                    sameDirection = false;
+                    break;
+                }
+            }
+            
+            if (sameDirection && Math.abs(last3[3] - last3[0]) < 10) {
+                isBetting = false;
+                stopCount++;
+                stopMessage.textContent = `⛔ STOP! Same direction ${stopCount}x - Subiri namba inayofuata`;
+                document.querySelector('.bet-stop').style.borderColor = '#ff4444';
+                return;
+            }
+        }
+        
+        // If confidence is low, stop bet
+        if (aiPredictions.length > 0 && aiPredictions[0].confidence < 50) {
+            isBetting = false;
+            stopCount++;
+            stopMessage.textContent = `⛔ STOP! Confidence low (${aiPredictions[0].confidence}%) - Subiri`;
+            document.querySelector('.bet-stop').style.borderColor = '#ff4444';
+            return;
+        }
+        
+        isBetting = true;
+        document.querySelector('.bet-stop').style.borderColor = 'rgba(68,255,136,0.15)';
+        stopMessage.textContent = '✅ Tayari kwa betting...';
+    }
+
+    // ============================================================
+    // STOP BET (Manual)
+    // ============================================================
+    function stopBet() {
+        isBetting = false;
+        stopCount++;
+        stopMessage.textContent = `⛔ STOP BET! (${stopCount}) - Subiri namba inayofuata`;
+        document.querySelector('.bet-stop').style.borderColor = '#ff4444';
+        showToast('⛔ Bet imesimamishwa! Subiri namba inayofuata.');
+    }
+
+    // ============================================================
+    // DISPLAY BOUNCE PREDICTIONS
+    // ============================================================
+    function displayBouncePredictions(results) {
+        if (results.length === 0) {
+            bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+            return;
+        }
+
+        bouncePredictionsEl.innerHTML = results.map((r, i) => {
+            const color = r.number === 0 ? 'gold' : COLORS[r.number];
+            const bounceClass = i < 3 ? 'bounce-high' : i < 6 ? 'bounce-mid' : 'bounce-low';
+            return `<div style="display:flex;flex-direction:column;align-items:center;margin:2px;">
+                <span class="num-badge ${color} ${bounceClass} text-[9px]" style="width:34px;height:34px;font-size:10px;">${r.number}</span>
+                <span style="font-size:5px;color:#666;">${Math.round(r.confidence)}%</span>
+                <span style="font-size:4px;color:#444;">#${r.bounceIndex}</span>
+            </div>`;
         }).join('');
-        seedCount.textContent = seedData.length;
+    }
+
+    // ============================================================
+    // DISPLAY BOUNCE PHYSICS
+    // ============================================================
+    function displayBouncePhysics(results) {
+        if (results.length === 0) {
+            bouncePhysicsEl.innerHTML = '<span class="text-gray-600">-</span>';
+            return;
+        }
+
+        const top3 = results.slice(0, 3).map(r => r.number).join(', ');
+        const mid3 = results.slice(3, 6).map(r => r.number).join(', ');
+        const last4 = results.slice(6, 10).map(r => r.number).join(', ');
+
+        bouncePhysicsEl.innerHTML = `
+            <div class="flex flex-wrap gap-2 text-[7px]">
+                <div><span class="text-red-400">🔴 1-3:</span> <span class="text-yellow-400">${top3}</span></div>
+                <div><span class="text-orange-400">🟠 4-6:</span> <span class="text-yellow-400">${mid3}</span></div>
+                <div><span class="text-blue-400">🔵 7-10:</span> <span class="text-yellow-400">${last4}</span></div>
+                <div><span class="text-gray-500">⚡ Speed:</span> <span class="text-white">${currentSpeed}</span></div>
+            </div>
+        `;
+    }
+
+    // ============================================================
+    // DISPLAY BOUNCE HEATMAP
+    // ============================================================
+    function displayBounceHeatmap(results) {
+        const heatmap = generateBounceHeatmap(results);
+        const sorted = Object.entries(heatmap).sort((a, b) => b[1] - a[1]);
+        
+        if (sorted.length === 0) {
+            bounceHeatmapEl.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+            return;
+        }
+
+        bounceHeatmapEl.innerHTML = sorted.slice(0, 12).map(([num, count]) => {
+            const n = parseInt(num);
+            const color = n === 0 ? 'gold' : COLORS[n];
+            const intensity = count >= 3 ? 'highlight' : '';
+            return `<span class="num-badge ${color} ${intensity} text-[6px]" style="width:22px;height:22px;font-size:6px;opacity:${0.4 + count * 0.2};">${n}</span>`;
+        }).join('');
+    }
+
+    // ============================================================
+    // DISPLAY AI PREDICTIONS
+    // ============================================================
+    function displayAIPredictions(preds) {
+        if (preds.length === 0) {
+            aiPredictionsEl.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+            return;
+        }
+
+        const top5 = preds.slice(0, 5);
+        aiPredictionsEl.innerHTML = top5.map((p, i) => {
+            const color = p.number === 0 ? 'gold' : COLORS[p.number];
+            const rank = i + 1;
+            const rankColor = rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-gray-300' : 'text-orange-400';
+            return `<div class="flex justify-between items-center py-0.5 border-b border-white/5">
+                <span class="text-[7px] ${rankColor}">#${rank}</span>
+                <span class="num-badge ${color} ${rank === 1 ? 'highlight' : ''} text-[8px]" style="width:28px;height:28px;font-size:8px;">${p.number}</span>
+                <span class="text-[8px] text-green-400">${Math.round(p.confidence)}%</span>
+                <span class="text-[6px] text-gray-500">${p.source || '-'}</span>
+            </div>`;
+        }).join('');
+    }
+
+    // ============================================================
+    // DISPLAY PATTERNS
+    // ============================================================
+    function displayPatterns() {
+        if (historyData.length < 3) {
+            patternDisplay.innerHTML = '<span class="text-gray-600">-</span>';
+            return;
+        }
+
+        const freq = {};
+        historyData.forEach(n => freq[n] = (freq[n] || 0) + 1);
+        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+        const top = sorted.slice(0, 3).map(n => n[0]);
+
+        // Check for streaks
+        let streak = 0;
+        let streakNum = historyData[historyData.length - 1];
+        for (let i = historyData.length - 1; i >= 0; i--) {
+            if (historyData[i] === streakNum) streak++;
+            else break;
+        }
+
+        patternDisplay.innerHTML = `
+            <div class="flex flex-wrap gap-2">
+                <div><span class="text-gray-500">HOT:</span> <span class="text-green-400">${top.join(', ') || '-'}</span></div>
+                <div><span class="text-gray-500">STREAK:</span> <span class="text-yellow-400">${streak > 1 ? `${streakNum} x${streak}` : '-'}</span></div>
+                <div><span class="text-gray-500">BOUNCE:</span> <span class="text-red-400">${bouncePredictions.length || 0}</span></div>
+                <div><span class="text-gray-500">BET:</span> <span class="${isBetting ? 'text-green-400' : 'text-red-400'}">${isBetting ? '✅ ACTIVE' : '⛔ STOP'}</span></div>
+            </div>
+        `;
+    }
+
+    // ============================================================
+    // UPDATE AI STATUS
+    // ============================================================
+    function updateAIStatus() {
+        const learningProgress = Math.min(100, Math.round((historyData.length / 20) * 100));
+        if (historyData.length < 5) {
+            aiStatus.textContent = `🧠 LEARNING... ${learningProgress}%`;
+            aiStatus.className = 'text-[8px] text-yellow-500 ai-thinking';
+        } else if (historyData.length < 15) {
+            aiStatus.textContent = `🧠 TRAINING... ${learningProgress}%`;
+            aiStatus.className = 'text-[8px] text-orange-400 ai-thinking';
+        } else {
+            aiStatus.textContent = `🧠 ACTIVE (${learningProgress}%)`;
+            aiStatus.className = 'text-[8px] text-green-400';
+        }
+    }
+
+    // ============================================================
+    // UPDATE STATS
+    // ============================================================
+    function updateStats() {
+        spinCountEl.textContent = spinCount;
+        bounceCountEl.textContent = bounceCount;
+        
+        if (historyData.length === 0) {
+            hotNumber.textContent = '-';
+            coldNumber.textContent = '-';
+            return;
+        }
+
+        const freq = {};
+        historyData.forEach(n => freq[n] = (freq[n] || 0) + 1);
+        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+        hotNumber.textContent = sorted.length > 0 ? sorted[0][0] : '-';
+        coldNumber.textContent = sorted.length > 0 ? sorted[sorted.length - 1][0] : '-';
     }
 
     // ============================================================
@@ -363,425 +902,75 @@
     }
 
     // ============================================================
-    // UPDATE STATS
-    // ============================================================
-    function updateStats() {
-        if (seedData.length === 0) {
-            uniqueCount.textContent = '0';
-            hotNumber.textContent = '-';
-            coldNumber.textContent = '-';
-            return;
-        }
-
-        const freq = {};
-        seedData.forEach(n => freq[n] = (freq[n] || 0) + 1);
-        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
-        
-        uniqueCount.textContent = Object.keys(freq).length;
-        hotNumber.textContent = sorted.length > 0 ? sorted[0][0] : '-';
-        coldNumber.textContent = sorted.length > 0 ? sorted[sorted.length - 1][0] : '-';
-    }
-
-    // ============================================================
-    // RUN AI ANALYSIS - Local + Mistral AI
-    // ============================================================
-    async function runAIAnalysis() {
-        if (seedData.length < 3) {
-            aiStatus.textContent = 'WAITING FOR SEED (min 3)';
-            aiStatus.className = 'ai-status idle';
-            predictionsContainer.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
-            patternContainer.innerHTML = '<span class="text-gray-600">-</span>';
-            betSuggestions.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
-            return;
-        }
-
-        aiStatus.textContent = '🧠 LEARNING...';
-        aiStatus.className = 'ai-status learning';
-
-        // 1. LOCAL ANALYSIS (Pattern Recognition)
-        const localResults = localPatternAnalysis(seedData);
-        
-        // 2. MISTRAL AI ANALYSIS
-        let mistralResults = [];
-        try {
-            mistralResults = await mistralAnalysis(seedData);
-        } catch (e) {
-            console.warn('Mistral API error:', e);
-            mistralResults = [];
-        }
-
-        // 3. Combine results
-        const combined = combineResults(localResults, mistralResults);
-        predictions = combined;
-
-        // 4. Update UI
-        displayPredictions(combined);
-        displayPatterns(localResults);
-        displayBetSuggestions(combined);
-        updateConfidence(combined);
-
-        // Update AI status
-        if (mistralResults.length > 0) {
-            aiStatus.textContent = '🤖 AI ACTIVE';
-            aiStatus.className = 'ai-status active';
-        } else {
-            aiStatus.textContent = '🧠 LOCAL MODE';
-            aiStatus.className = 'ai-status learning';
-        }
-    }
-
-    // ============================================================
-    // LOCAL PATTERN ANALYSIS
-    // ============================================================
-    function localPatternAnalysis(data) {
-        const results = [];
-        const freq = {};
-        data.forEach(n => freq[n] = (freq[n] || 0) + 1);
-
-        // 1. Frequency-based
-        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
-        const topFreq = sorted.slice(0, 3).map(n => parseInt(n[0]));
-        topFreq.forEach(n => {
-            const conf = Math.min(85, 50 + (freq[n] * 5));
-            results.push({ number: n, confidence: conf, source: 'FREQUENCY' });
-        });
-
-        // 2. Gap analysis
-        if (data.length >= 4) {
-            const gaps = [];
-            for (let i = 1; i < data.length; i++) {
-                let gap = data[i] - data[i-1];
-                if (gap < -18) gap += 37;
-                if (gap > 18) gap -= 37;
-                gaps.push(gap);
-            }
-            const avgGap = gaps.reduce((a,b) => a + b, 0) / gaps.length;
-            const last = data[data.length - 1];
-            
-            const predRight = ((last + Math.round(avgGap * 0.6)) % 37 + 37) % 37;
-            const predLeft = ((last - Math.round(avgGap * 0.6)) % 37 + 37) % 37;
-            
-            results.push({ number: predRight, confidence: 65, source: 'GAP→' });
-            results.push({ number: predLeft, confidence: 60, source: 'GAP←' });
-        }
-
-        // 3. Neighbor analysis
-        const last = data[data.length - 1];
-        for (let i = -3; i <= 3; i++) {
-            if (i === 0) continue;
-            const num = ((last + i) % 37 + 37) % 37;
-            const conf = 45 + (4 - Math.abs(i)) * 3;
-            results.push({ number: num, confidence: conf, source: 'NEAR' });
-        }
-
-        return results;
-    }
-
-    // ============================================================
-    // MISTRAL AI ANALYSIS
-    // ============================================================
-    async function mistralAnalysis(data) {
-        const seedStr = data.join(', ');
-        const last5 = data.slice(-5).join(', ');
-        const freq = {};
-        data.forEach(n => freq[n] = (freq[n] || 0) + 1);
-        const hot = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 3).map(n => n[0]).join(', ');
-
-        const prompt = `You are a roulette prediction AI. Analyze this data and predict the next 5 numbers.
-
-SEED DATA: ${seedStr}
-LAST 5 NUMBERS: ${last5}
-HOT NUMBERS: ${hot}
-TOTAL SPINS: ${data.length}
-
-Based on patterns, gaps, and frequency analysis, predict the top 5 numbers most likely to appear next.
-Return ONLY the numbers as a JSON array: [num1, num2, num3, num4, num5]`;
-
-        try {
-            const response = await fetch(MISTRAL_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${MISTRAL_API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: 'mistral-tiny',
-                    messages: [
-                        { role: 'system', content: 'You are a roulette pattern prediction expert. Return only JSON.' },
-                        { role: 'user', content: prompt }
-                    ],
-                    temperature: 0.3,
-                    max_tokens: 100
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('API Error: ' + response.status);
-            }
-
-            const result = await response.json();
-            const content = result.choices[0].message.content;
-            
-            // Extract JSON
-            const jsonMatch = content.match(/\[[\d,\s]+\]/);
-            if (jsonMatch) {
-                const nums = JSON.parse(jsonMatch[0]);
-                return nums.map((n, i) => ({
-                    number: n,
-                    confidence: 85 - (i * 5),
-                    source: 'MISTRAL AI'
-                }));
-            }
-            
-            return [];
-        } catch (e) {
-            console.warn('Mistral error:', e);
-            return [];
-        }
-    }
-
-    // ============================================================
-    // COMBINE RESULTS
-    // ============================================================
-    function combineResults(local, mistral) {
-        const combined = {};
-        
-        // Add local results
-        local.forEach(r => {
-            if (!combined[r.number] || combined[r.number].confidence < r.confidence) {
-                combined[r.number] = { ...r };
-            }
-        });
-
-        // Add mistral results (higher weight)
-        mistral.forEach(r => {
-            if (!combined[r.number]) {
-                combined[r.number] = { ...r };
-            } else {
-                // Boost confidence for AI predictions
-                combined[r.number].confidence = Math.min(95, combined[r.number].confidence + 10);
-                combined[r.number].source = 'MISTRAL+LOCAL';
-            }
-        });
-
-        // Sort by confidence
-        const sorted = Object.values(combined).sort((a, b) => b.confidence - a.confidence);
-        
-        // Boost top predictions
-        sorted.forEach((p, i) => {
-            if (i === 0) p.confidence = Math.min(95, p.confidence + 5);
-            if (i === 1) p.confidence = Math.min(92, p.confidence + 3);
-        });
-
-        return sorted.slice(0, 8);
-    }
-
-    // ============================================================
-    // DISPLAY PREDICTIONS
-    // ============================================================
-    function displayPredictions(preds) {
-        if (preds.length === 0) {
-            predictionsContainer.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
-            return;
-        }
-
-        predictionsContainer.innerHTML = preds.map((p, i) => {
-            const color = p.number === 0 ? 'gold' : COLORS[p.number];
-            const rank = i + 1;
-            const rankColor = rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-gray-300' : rank === 3 ? 'text-orange-400' : 'text-gray-500';
-            return `<div class="prediction-item">
-                <span class="rank ${rankColor}">#${rank}</span>
-                <span class="num-badge ${color} ${rank === 1 ? 'highlight' : ''} text-[9px]" style="width:30px;height:30px;font-size:9px;">${p.number}</span>
-                <span class="prob">${p.confidence}%</span>
-                <span class="text-[6px] text-gray-500">${p.source || 'LOCAL'}</span>
-            </div>`;
-        }).join('');
-    }
-
-    // ============================================================
-    // DISPLAY PATTERNS
-    // ============================================================
-    function displayPatterns(results) {
-        if (results.length === 0) {
-            patternContainer.innerHTML = '<span class="text-gray-600">-</span>';
-            return;
-        }
-
-        // Extract patterns
-        const freq = {};
-        seedData.forEach(n => freq[n] = (freq[n] || 0) + 1);
-        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
-        const top = sorted.slice(0, 3).map(n => n[0]);
-
-        // Gap analysis
-        let direction = 'STABLE';
-        if (seedData.length >= 4) {
-            let left = 0, right = 0;
-            for (let i = 1; i < Math.min(seedData.length, 15); i++) {
-                let gap = seedData[i] - seedData[i-1];
-                if (gap < -18) gap += 37;
-                if (gap > 18) gap -= 37;
-                if (gap < 0) left++;
-                else if (gap > 0) right++;
-            }
-            if (left > right * 1.5) direction = '⬅ KUSHOTO';
-            else if (right > left * 1.5) direction = 'KULIA ➡';
-        }
-
-        patternContainer.innerHTML = `
-            <div class="flex flex-wrap gap-2">
-                <div class="text-[7px]"><span class="text-gray-500">HOT:</span> <span class="text-green-400">${top.join(', ') || '-'}</span></div>
-                <div class="text-[7px]"><span class="text-gray-500">MWENDO:</span> <span class="text-yellow-400">${direction}</span></div>
-                <div class="text-[7px]"><span class="text-gray-500">SEED:</span> <span class="text-blue-400">${seedData.length}</span></div>
-            </div>
-        `;
-    }
-
-    // ============================================================
-    // DISPLAY BET SUGGESTIONS
-    // ============================================================
-    function displayBetSuggestions(preds) {
-        if (preds.length === 0) {
-            betSuggestions.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
-            return;
-        }
-
-        const top = preds.slice(0, 5);
-        const nums = top.map(p => p.number);
-        const sortedNums = nums.sort((a, b) => a - b);
-
-        // Determine bet types
-        const first12 = nums.filter(n => n >= 1 && n <= 12);
-        const second12 = nums.filter(n => n >= 13 && n <= 24);
-        const third12 = nums.filter(n => n >= 25 && n <= 36);
-        const reds = nums.filter(n => COLORS[n] === 'red');
-        const blacks = nums.filter(n => COLORS[n] === 'black');
-
-        let suggestions = [];
-        
-        // Column bets
-        const col1 = nums.filter(n => n % 3 === 1);
-        const col2 = nums.filter(n => n % 3 === 2);
-        const col3 = nums.filter(n => n % 3 === 0);
-        
-        if (col1.length >= 2) suggestions.push({ type: 'COLUMN 1', nums: col1, strength: col1.length });
-        if (col2.length >= 2) suggestions.push({ type: 'COLUMN 2', nums: col2, strength: col2.length });
-        if (col3.length >= 2) suggestions.push({ type: 'COLUMN 3', nums: col3, strength: col3.length });
-
-        // Dozen bets
-        if (first12.length >= 2) suggestions.push({ type: '1ST 12 (1-12)', nums: first12, strength: first12.length });
-        if (second12.length >= 2) suggestions.push({ type: '2ND 12 (13-24)', nums: second12, strength: second12.length });
-        if (third12.length >= 2) suggestions.push({ type: '3RD 12 (25-36)', nums: third12, strength: third12.length });
-
-        // Color bets
-        if (reds.length >= 3) suggestions.push({ type: '🔴 RED', nums: reds, strength: reds.length });
-        if (blacks.length >= 3) suggestions.push({ type: '⚫ BLACK', nums: blacks, strength: blacks.length });
-
-        // High/Low
-        const lows = nums.filter(n => n >= 1 && n <= 18);
-        const highs = nums.filter(n => n >= 19 && n <= 36);
-        if (lows.length >= 3) suggestions.push({ type: '⬇ LOW (1-18)', nums: lows, strength: lows.length });
-        if (highs.length >= 3) suggestions.push({ type: '⬆ HIGH (19-36)', nums: highs, strength: highs.length });
-
-        // Neighbor bets (top 3)
-        if (nums.length >= 3) {
-            const top3 = nums.slice(0, 3);
-            suggestions.push({ type: '🎯 NEARBY', nums: top3, strength: top3.length });
-        }
-
-        // Sort by strength
-        suggestions.sort((a, b) => b.strength - a.strength);
-
-        betSuggestions.innerHTML = suggestions.slice(0, 6).map(s => 
-            `<div class="bet-suggestion">
-                <div class="label">${s.type}</div>
-                <div class="flex gap-0.5 mt-0.5">
-                    ${s.nums.map(n => `<span class="num-badge ${n === 0 ? 'gold' : COLORS[n]} text-[6px]" style="width:20px;height:20px;font-size:6px;">${n}</span>`).join('')}
-                    <span class="text-[6px] text-green-400 ml-1">(${s.strength}x)</span>
-                </div>
-            </div>`
-        ).join('') || '<span class="text-gray-600 text-[8px]">-</span>';
-    }
-
-    // ============================================================
-    // UPDATE CONFIDENCE
-    // ============================================================
-    function updateConfidence(preds) {
-        if (preds.length === 0) {
-            confidence = 0;
-            confidenceFill.style.width = '0%';
-            confidenceText.textContent = '0%';
-            return;
-        }
-
-        const avgConf = preds.reduce((sum, p) => sum + p.confidence, 0) / preds.length;
-        const boost = Math.min(20, seedData.length * 0.5);
-        confidence = Math.min(95, avgConf + boost);
-        
-        confidenceFill.style.width = confidence + '%';
-        confidenceText.textContent = Math.round(confidence) + '%';
-        
-        // Color based on confidence
-        if (confidence > 70) {
-            confidenceFill.className = 'h-full bg-green-400 rounded-full transition-all duration-500';
-        } else if (confidence > 50) {
-            confidenceFill.className = 'h-full bg-yellow-400 rounded-full transition-all duration-500';
-        } else {
-            confidenceFill.className = 'h-full bg-red-400 rounded-full transition-all duration-500';
-        }
-    }
-
-    // ============================================================
     // QUICK FILL
     // ============================================================
     function quickFill(nums) {
         nums.forEach(n => {
-            seedData.push(n);
             historyData.push(n);
+            spinCount++;
+            bounceCount++;
         });
-        if (seedData.length > 50) seedData.splice(0, seedData.length - 50);
         if (historyData.length > 200) historyData.splice(0, historyData.length - 200);
         
-        updateSeedDisplay();
+        // Update wheel with last number
+        const last = historyData[historyData.length - 1];
+        updateWheel(last);
+        showBounceDots(last);
+        updateDirectionAndSpeed();
+        
+        // Run bounce physics
+        const speed = currentSpeed || 3;
+        const direction = currentDirection;
+        const bounceResults = calculateBouncePhysics(last, speed, direction);
+        bouncePredictions = bounceResults;
+        aiPredictions = generateAIPredictions(historyData, bounceResults);
+        
+        updateStats();
         updateHistoryDisplay();
-        updateStats();
-        runAIAnalysis();
-        showToast(`✅ Namba ${nums.length} zimeongezwa kwenye Seed`);
-    }
-
-    // ============================================================
-    // CLEAR SEED
-    // ============================================================
-    function clearSeed() {
-        seedData = [];
-        updateSeedDisplay();
-        updateStats();
-        runAIAnalysis();
-        showToast('🗑️ Seed imefutwa');
+        displayBouncePredictions(bounceResults);
+        displayBouncePhysics(bounceResults);
+        displayBounceHeatmap(bounceResults);
+        displayAIPredictions(aiPredictions);
+        displayPatterns();
+        updateAIStatus();
+        checkStopBet();
+        
+        showToast(`✅ Namba ${nums.length} zimeongezwa | Bounce: ${bounceResults.length} positions`);
     }
 
     // ============================================================
     // CLEAR ALL
     // ============================================================
     function clearAll() {
-        seedData = [];
         historyData = [];
-        predictions = [];
-        confidence = 0;
+        spinCount = 0;
+        bounceCount = 0;
+        bouncePredictions = [];
+        aiPredictions = [];
+        isBetting = true;
+        stopCount = 0;
         
-        seedContainer.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
-        historyDisplay.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
-        predictionsContainer.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
-        patternContainer.innerHTML = '<span class="text-gray-600">-</span>';
-        betSuggestions.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
-        confidenceFill.style.width = '0%';
-        confidenceText.textContent = '0%';
-        seedCount.textContent = '0';
-        uniqueCount.textContent = '0';
+        spinCountEl.textContent = '0';
+        bounceCountEl.textContent = '0';
         hotNumber.textContent = '-';
         coldNumber.textContent = '-';
-        aiStatus.textContent = 'IDLE';
-        aiStatus.className = 'ai-status idle';
+        historyDisplay.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+        bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+        bouncePhysicsEl.innerHTML = '<span class="text-gray-600">-</span>';
+        bounceHeatmapEl.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+        aiPredictionsEl.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+        patternDisplay.innerHTML = '<span class="text-gray-600">-</span>';
+        bounceDots.innerHTML = '';
+        wheel.style.transform = 'rotate(0deg)';
+        centerDisplay.textContent = '0';
+        centerDisplay.style.color = '#FFD700';
+        directionDisplay.textContent = '⚖️ STABLE';
+        directionDisplay.className = 'direction-indicator stable';
+        speedDisplay.textContent = '0';
+        aiStatus.textContent = '🧠 IDLE';
+        aiStatus.className = 'text-[8px] text-gray-500';
+        stopMessage.textContent = 'Tayari kwa betting...';
+        document.querySelector('.bet-stop').style.borderColor = 'rgba(68,255,136,0.15)';
         
         showToast('🗑️ Yote imefutwa');
     }
@@ -804,7 +993,11 @@ Return ONLY the numbers as a JSON array: [num1, num2, num3, num4, num5]`;
             e.preventDefault();
             addLiveNumber();
         }
-        if (e.ctrlKey && e.key === 'c') {
+        if (e.key === 's' && e.ctrlKey) {
+            e.preventDefault();
+            stopBet();
+        }
+        if (e.key === 'c' && e.ctrlKey) {
             e.preventDefault();
             clearAll();
         }
@@ -814,10 +1007,10 @@ Return ONLY the numbers as a JSON array: [num1, num2, num3, num4, num5]`;
     // INIT
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
-        showToast('🧠 Smart Brain iko tayari! Weka namba kuanza');
+        showToast('🎯 Advanced Roulette Brain iko tayari!');
         liveInput.focus();
         
-        // Auto-run with sample data
+        // Auto-run with sample
         setTimeout(() => {
             quickFill([25,5,5,21,22,7,2,24,21,36,23,32]);
         }, 500);

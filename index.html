@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>🧠 Smart Roulette Brain - Dr. William</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, #05050f 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 12px;
+            color: #fff;
+        }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        .glass {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,215,0,0.06);
+            box-shadow: 0 20px 60px -12px rgba(0,0,0,0.9);
+        }
+        .gold-text { color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.1); }
+        .brain-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        
+        .num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 34px; height: 34px; border-radius: 50%;
+            font-weight: 700; font-size: 11px;
+            border: 2px solid rgba(255,215,0,0.06);
+            font-family: 'Orbitron', sans-serif;
+            margin: 2px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .num-badge:hover { transform: scale(1.08); border-color: #FFD700; }
+        .num-badge.red { background: #8b0000; color: #fff; }
+        .num-badge.black { background: #1a472a; color: #fff; }
+        .num-badge.gold { background: #FFD700; color: #1a1a2e; border-color: #FFD700; }
+        .num-badge.seed { border-color: #00ccff; box-shadow: 0 0 20px rgba(0,204,255,0.2); }
+        .num-badge.predicted { border-color: #44ff88; box-shadow: 0 0 25px rgba(68,255,136,0.2); }
+        .num-badge.highlight { border-color: #FFD700; box-shadow: 0 0 30px rgba(255,215,0,0.3); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700, #B8860B);
+            color: #1a1a2e; font-weight: 900; padding: 10px 24px;
+            border-radius: 50px; border: none;
+            font-family: 'Orbitron', sans-serif; font-size: 11px;
+            cursor: pointer; transition: all 0.3s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-primary:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(255,215,0,0.15); }
+        .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .btn-secondary {
+            background: rgba(255,255,255,0.04); color: #999;
+            padding: 8px 16px; border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.04);
+            font-family: 'Orbitron', sans-serif; font-size: 9px;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+        .stat-card {
+            background: rgba(0,0,0,0.25);
+            border-radius: 10px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255,215,0,0.04);
+            text-align: center;
+        }
+        .stat-card .number { font-size: 22px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
+        .stat-card .label { font-size: 7px; color: #888; letter-spacing: 1px; }
+
+        .seed-box {
+            background: rgba(0,0,0,0.3);
+            border: 2px dashed rgba(0,204,255,0.15);
+            border-radius: 12px;
+            padding: 8px 12px;
+            min-height: 50px;
+        }
+        .seed-box .label { font-size: 7px; color: #00ccff; letter-spacing: 1px; }
+
+        .toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.85); color: #FFD700;
+            padding: 10px 20px; border-radius: 50px; font-size: 10px;
+            font-weight: 600; border: 1px solid rgba(255,215,0,0.06);
+            z-index: 999; transition: all 0.4s; backdrop-filter: blur(12px);
+            font-family: 'Orbitron', sans-serif;
+        }
+        .toast.hide { opacity: 0; transform: translateX(-50%) translateY(20px); }
+
+        .prediction-item {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 6px 10px;
+            border: 1px solid rgba(68,255,136,0.06);
+            margin-bottom: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .prediction-item .rank { font-size: 7px; color: #666; }
+        .prediction-item .num { font-size: 14px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
+        .prediction-item .prob { font-size: 9px; color: #44ff88; }
+
+        .bet-suggestion {
+            background: rgba(255,215,0,0.04);
+            border: 1px solid rgba(255,215,0,0.08);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 4px;
+        }
+        .bet-suggestion .label { font-size: 7px; color: #FFD700; letter-spacing: 1px; }
+
+        .scrollbar-thin::-webkit-scrollbar { width: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.01); }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #FFD700; border-radius: 4px; }
+
+        .input-num {
+            width: 44px; height: 44px; text-align: center;
+            background: rgba(0,0,0,0.4); border: 2px solid rgba(255,215,0,0.08);
+            border-radius: 10px; font-size: 16px; font-weight: 700;
+            color: #FFD700; outline: none; font-family: 'Orbitron', sans-serif;
+        }
+        .input-num:focus { border-color: #FFD700; }
+
+        .ai-status {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 7px;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .ai-status.active { background: rgba(68,255,136,0.15); color: #44ff88; }
+        .ai-status.learning { background: rgba(255,215,0,0.15); color: #FFD700; animation: pulse 1s infinite; }
+        .ai-status.idle { background: rgba(255,255,255,0.05); color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="max-w-7xl mx-auto">
+    <!-- HEADER -->
+    <div class="text-center mb-4">
+        <h1 class="text-xl md:text-3xl font-black gold-text orbitron tracking-wider">
+            🧠 SMART ROULETTE <span class="text-white">BRAIN</span>
+            <span class="text-[10px] block text-yellow-500/30 font-normal tracking-widest">AI-POWERED • SELF-LEARNING • PATTERN RECOGNITION</span>
+        </h1>
+    </div>
+
+    <div class="grid lg:grid-cols-4 gap-4">
+        <!-- LEFT: INPUT + SEED -->
+        <div class="lg:col-span-1 glass rounded-2xl p-4">
+            <p class="text-[8px] text-gray-500 tracking-widest text-center mb-2">📝 WEKA NAMBA ILIYOTOOKA</p>
+            <div class="flex gap-2 justify-center">
+                <input type="number" id="liveInput" min="0" max="36" placeholder="?" 
+                       class="input-num w-14 h-12 text-lg" onkeydown="if(event.key==='Enter') addLiveNumber()">
+                <button class="btn-primary text-[8px] px-3 py-2" onclick="addLiveNumber()">➕ ONGEZA</button>
+            </div>
+
+            <!-- SEED BOX -->
+            <div class="mt-3 seed-box">
+                <div class="label">🧬 SEED BOX (Namba Zilizojaza AI)</div>
+                <div id="seedContainer" class="flex flex-wrap gap-0.5 mt-1 min-h-[36px]">
+                    <span class="text-gray-600 text-[7px]">-</span>
+                </div>
+            </div>
+
+            <!-- AI STATUS -->
+            <div class="mt-2 flex justify-between items-center">
+                <span class="text-[7px] text-gray-500">🤖 AI STATUS</span>
+                <span id="aiStatus" class="ai-status idle">IDLE</span>
+            </div>
+
+            <!-- QUICK FILL -->
+            <div class="mt-2 flex flex-wrap gap-0.5 justify-center">
+                <span class="text-[6px] text-gray-600">MIFANO:</span>
+                <button onclick="quickFill([25,5,5,21,22,7])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 1</button>
+                <button onclick="quickFill([23,19,13,8,29,33])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 2</button>
+                <button onclick="quickFill([34,16,16,11,24,4])" class="text-[6px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">SAMPLE 3</button>
+            </div>
+        </div>
+
+        <!-- MIDDLE LEFT: PREDICTIONS -->
+        <div class="lg:col-span-1 glass rounded-2xl p-4">
+            <p class="text-[8px] text-green-400/60 tracking-widest mb-2">🎯 AI PREDICTIONS</p>
+            <div id="predictionsContainer" class="space-y-1 max-h-64 overflow-y-auto scrollbar-thin">
+                <span class="text-gray-600 text-[8px]">-</span>
+            </div>
+
+            <div class="mt-3">
+                <p class="text-[8px] text-yellow-500/60 tracking-widest">📊 PATTERN RECOGNITION</p>
+                <div id="patternContainer" class="text-[8px] text-gray-300 mt-1">
+                    <span class="text-gray-600">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MIDDLE RIGHT: BET SUGGESTIONS -->
+        <div class="lg:col-span-1 glass rounded-2xl p-4">
+            <p class="text-[8px] text-yellow-500/60 tracking-widest mb-2">💡 BET SUGGESTIONS</p>
+            <div id="betSuggestions" class="space-y-1 max-h-64 overflow-y-auto scrollbar-thin">
+                <span class="text-gray-600 text-[8px]">-</span>
+            </div>
+
+            <div class="mt-3">
+                <p class="text-[8px] text-blue-400/60 tracking-widest">📈 CONFIDENCE LEVEL</p>
+                <div id="confidenceMeter" class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden mt-1">
+                    <div id="confidenceFill" class="h-full bg-green-400 rounded-full transition-all duration-500" style="width:0%"></div>
+                </div>
+                <div class="flex justify-between text-[6px] text-gray-600 mt-0.5">
+                    <span>0%</span>
+                    <span id="confidenceText" class="text-yellow-500">0%</span>
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: STATS -->
+        <div class="lg:col-span-1 glass rounded-2xl p-4">
+            <div class="grid grid-cols-2 gap-2">
+                <div class="stat-card">
+                    <div class="label">SEED COUNT</div>
+                    <div class="number text-white" id="seedCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">UNIQUE</div>
+                    <div class="number text-yellow-400" id="uniqueCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">HOT</div>
+                    <div class="number text-green-400" id="hotNumber">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">COLD</div>
+                    <div class="number text-red-400" id="coldNumber">-</div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <p class="text-[7px] text-gray-500 tracking-widest">📋 HISTORY</p>
+                <div id="historyDisplay" class="flex flex-wrap gap-0.5 max-h-28 overflow-y-auto scrollbar-thin mt-1">
+                    <span class="text-gray-600 text-[7px]">-</span>
+                </div>
+            </div>
+
+            <div class="mt-3 flex gap-2">
+                <button class="btn-secondary text-[7px] px-3 py-1.5 flex-1" onclick="clearSeed()">⟳ CLEAR SEED</button>
+                <button class="btn-secondary text-[7px] px-3 py-1.5 flex-1" onclick="clearAll()">🗑️ FUTA YOTE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4 text-[7px] text-gray-700 tracking-widest border-t border-white/5 pt-3">
+        🧠 SMART ROULETTE BRAIN • AI-POWERED • SELF-LEARNING • PATTERN RECOGNITION
+    </div>
+</div>
+
+<div id="toast" class="toast hide"></div>
+
+<script>
+    // ============================================================
+    // CONFIG
+    // ============================================================
+    const COLORS = {
+        0: 'gold', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'red', 6: 'black',
+        7: 'red', 8: 'black', 9: 'red', 10: 'black', 11: 'black', 12: 'red',
+        13: 'black', 14: 'red', 15: 'black', 16: 'red', 17: 'black', 18: 'red',
+        19: 'red', 20: 'black', 21: 'red', 22: 'black', 23: 'red', 24: 'black',
+        25: 'red', 26: 'black', 27: 'red', 28: 'black', 29: 'black', 30: 'red',
+        31: 'black', 32: 'red', 33: 'black', 34: 'red', 35: 'black', 36: 'red'
+    };
+
+    // Mistral AI API Key
+    const MISTRAL_API_KEY = 'ISA7YuyZAzX7wEMTZlJ8WXr1XWQcGlgE';
+    const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let seedData = [];
+    let historyData = [];
+    let predictions = [];
+    let confidence = 0;
+
+    // ============================================================
+    // DOM REFS
+    // ============================================================
+    const liveInput = document.getElementById('liveInput');
+    const seedContainer = document.getElementById('seedContainer');
+    const seedCount = document.getElementById('seedCount');
+    const uniqueCount = document.getElementById('uniqueCount');
+    const hotNumber = document.getElementById('hotNumber');
+    const coldNumber = document.getElementById('coldNumber');
+    const historyDisplay = document.getElementById('historyDisplay');
+    const predictionsContainer = document.getElementById('predictionsContainer');
+    const patternContainer = document.getElementById('patternContainer');
+    const betSuggestions = document.getElementById('betSuggestions');
+    const confidenceFill = document.getElementById('confidenceFill');
+    const confidenceText = document.getElementById('confidenceText');
+    const aiStatus = document.getElementById('aiStatus');
+    const toast = document.getElementById('toast');
+
+    // ============================================================
+    // ADD LIVE NUMBER
+    // ============================================================
+    function addLiveNumber() {
+        const num = parseInt(liveInput.value);
+        if (isNaN(num) || num < 0 || num > 36) {
+            showToast('⚠️ Weka namba halali (0-36)');
+            return;
+        }
+
+        // Add to seed
+        seedData.push(num);
+        if (seedData.length > 50) seedData.shift();
+
+        // Add to history
+        historyData.push(num);
+        if (historyData.length > 200) historyData.splice(0, historyData.length - 200);
+
+        // Update UI
+        updateSeedDisplay();
+        updateHistoryDisplay();
+        updateStats();
+
+        // Run AI analysis
+        runAIAnalysis();
+
+        liveInput.value = '';
+        liveInput.focus();
+        showToast(`✅ Namba ${num} imeongezwa kwenye Seed`);
+    }
+
+    // ============================================================
+    // UPDATE SEED DISPLAY
+    // ============================================================
+    function updateSeedDisplay() {
+        if (seedData.length === 0) {
+            seedContainer.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+            return;
+        }
+        seedContainer.innerHTML = seedData.map((n, i) => {
+            const color = n === 0 ? 'gold' : COLORS[n];
+            const isRecent = i >= seedData.length - 3;
+            return `<span class="num-badge ${color} ${isRecent ? 'seed' : ''} text-[7px]" style="width:24px;height:24px;font-size:7px;">${n}</span>`;
+        }).join('');
+        seedCount.textContent = seedData.length;
+    }
+
+    // ============================================================
+    // UPDATE HISTORY
+    // ============================================================
+    function updateHistoryDisplay() {
+        const display = historyData.slice(-40);
+        historyDisplay.innerHTML = display.map(n => {
+            const color = n === 0 ? 'gold' : COLORS[n];
+            return `<span class="history-dot ${color}" style="width:22px;height:22px;font-size:7px;">${n}</span>`;
+        }).join('') || '<span class="text-gray-600 text-[7px]">-</span>';
+    }
+
+    // ============================================================
+    // UPDATE STATS
+    // ============================================================
+    function updateStats() {
+        if (seedData.length === 0) {
+            uniqueCount.textContent = '0';
+            hotNumber.textContent = '-';
+            coldNumber.textContent = '-';
+            return;
+        }
+
+        const freq = {};
+        seedData.forEach(n => freq[n] = (freq[n] || 0) + 1);
+        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+        
+        uniqueCount.textContent = Object.keys(freq).length;
+        hotNumber.textContent = sorted.length > 0 ? sorted[0][0] : '-';
+        coldNumber.textContent = sorted.length > 0 ? sorted[sorted.length - 1][0] : '-';
+    }
+
+    // ============================================================
+    // RUN AI ANALYSIS - Local + Mistral AI
+    // ============================================================
+    async function runAIAnalysis() {
+        if (seedData.length < 3) {
+            aiStatus.textContent = 'WAITING FOR SEED (min 3)';
+            aiStatus.className = 'ai-status idle';
+            predictionsContainer.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+            patternContainer.innerHTML = '<span class="text-gray-600">-</span>';
+            betSuggestions.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+            return;
+        }
+
+        aiStatus.textContent = '🧠 LEARNING...';
+        aiStatus.className = 'ai-status learning';
+
+        // 1. LOCAL ANALYSIS (Pattern Recognition)
+        const localResults = localPatternAnalysis(seedData);
+        
+        // 2. MISTRAL AI ANALYSIS
+        let mistralResults = [];
+        try {
+            mistralResults = await mistralAnalysis(seedData);
+        } catch (e) {
+            console.warn('Mistral API error:', e);
+            mistralResults = [];
+        }
+
+        // 3. Combine results
+        const combined = combineResults(localResults, mistralResults);
+        predictions = combined;
+
+        // 4. Update UI
+        displayPredictions(combined);
+        displayPatterns(localResults);
+        displayBetSuggestions(combined);
+        updateConfidence(combined);
+
+        // Update AI status
+        if (mistralResults.length > 0) {
+            aiStatus.textContent = '🤖 AI ACTIVE';
+            aiStatus.className = 'ai-status active';
+        } else {
+            aiStatus.textContent = '🧠 LOCAL MODE';
+            aiStatus.className = 'ai-status learning';
+        }
+    }
+
+    // ============================================================
+    // LOCAL PATTERN ANALYSIS
+    // ============================================================
+    function localPatternAnalysis(data) {
+        const results = [];
+        const freq = {};
+        data.forEach(n => freq[n] = (freq[n] || 0) + 1);
+
+        // 1. Frequency-based
+        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+        const topFreq = sorted.slice(0, 3).map(n => parseInt(n[0]));
+        topFreq.forEach(n => {
+            const conf = Math.min(85, 50 + (freq[n] * 5));
+            results.push({ number: n, confidence: conf, source: 'FREQUENCY' });
+        });
+
+        // 2. Gap analysis
+        if (data.length >= 4) {
+            const gaps = [];
+            for (let i = 1; i < data.length; i++) {
+                let gap = data[i] - data[i-1];
+                if (gap < -18) gap += 37;
+                if (gap > 18) gap -= 37;
+                gaps.push(gap);
+            }
+            const avgGap = gaps.reduce((a,b) => a + b, 0) / gaps.length;
+            const last = data[data.length - 1];
+            
+            const predRight = ((last + Math.round(avgGap * 0.6)) % 37 + 37) % 37;
+            const predLeft = ((last - Math.round(avgGap * 0.6)) % 37 + 37) % 37;
+            
+            results.push({ number: predRight, confidence: 65, source: 'GAP→' });
+            results.push({ number: predLeft, confidence: 60, source: 'GAP←' });
+        }
+
+        // 3. Neighbor analysis
+        const last = data[data.length - 1];
+        for (let i = -3; i <= 3; i++) {
+            if (i === 0) continue;
+            const num = ((last + i) % 37 + 37) % 37;
+            const conf = 45 + (4 - Math.abs(i)) * 3;
+            results.push({ number: num, confidence: conf, source: 'NEAR' });
+        }
+
+        return results;
+    }
+
+    // ============================================================
+    // MISTRAL AI ANALYSIS
+    // ============================================================
+    async function mistralAnalysis(data) {
+        const seedStr = data.join(', ');
+        const last5 = data.slice(-5).join(', ');
+        const freq = {};
+        data.forEach(n => freq[n] = (freq[n] || 0) + 1);
+        const hot = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 3).map(n => n[0]).join(', ');
+
+        const prompt = `You are a roulette prediction AI. Analyze this data and predict the next 5 numbers.
+
+SEED DATA: ${seedStr}
+LAST 5 NUMBERS: ${last5}
+HOT NUMBERS: ${hot}
+TOTAL SPINS: ${data.length}
+
+Based on patterns, gaps, and frequency analysis, predict the top 5 numbers most likely to appear next.
+Return ONLY the numbers as a JSON array: [num1, num2, num3, num4, num5]`;
+
+        try {
+            const response = await fetch(MISTRAL_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${MISTRAL_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: 'mistral-tiny',
+                    messages: [
+                        { role: 'system', content: 'You are a roulette pattern prediction expert. Return only JSON.' },
+                        { role: 'user', content: prompt }
+                    ],
+                    temperature: 0.3,
+                    max_tokens: 100
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('API Error: ' + response.status);
+            }
+
+            const result = await response.json();
+            const content = result.choices[0].message.content;
+            
+            // Extract JSON
+            const jsonMatch = content.match(/\[[\d,\s]+\]/);
+            if (jsonMatch) {
+                const nums = JSON.parse(jsonMatch[0]);
+                return nums.map((n, i) => ({
+                    number: n,
+                    confidence: 85 - (i * 5),
+                    source: 'MISTRAL AI'
+                }));
+            }
+            
+            return [];
+        } catch (e) {
+            console.warn('Mistral error:', e);
+            return [];
+        }
+    }
+
+    // ============================================================
+    // COMBINE RESULTS
+    // ============================================================
+    function combineResults(local, mistral) {
+        const combined = {};
+        
+        // Add local results
+        local.forEach(r => {
+            if (!combined[r.number] || combined[r.number].confidence < r.confidence) {
+                combined[r.number] = { ...r };
+            }
+        });
+
+        // Add mistral results (higher weight)
+        mistral.forEach(r => {
+            if (!combined[r.number]) {
+                combined[r.number] = { ...r };
+            } else {
+                // Boost confidence for AI predictions
+                combined[r.number].confidence = Math.min(95, combined[r.number].confidence + 10);
+                combined[r.number].source = 'MISTRAL+LOCAL';
+            }
+        });
+
+        // Sort by confidence
+        const sorted = Object.values(combined).sort((a, b) => b.confidence - a.confidence);
+        
+        // Boost top predictions
+        sorted.forEach((p, i) => {
+            if (i === 0) p.confidence = Math.min(95, p.confidence + 5);
+            if (i === 1) p.confidence = Math.min(92, p.confidence + 3);
+        });
+
+        return sorted.slice(0, 8);
+    }
+
+    // ============================================================
+    // DISPLAY PREDICTIONS
+    // ============================================================
+    function displayPredictions(preds) {
+        if (preds.length === 0) {
+            predictionsContainer.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+            return;
+        }
+
+        predictionsContainer.innerHTML = preds.map((p, i) => {
+            const color = p.number === 0 ? 'gold' : COLORS[p.number];
+            const rank = i + 1;
+            const rankColor = rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-gray-300' : rank === 3 ? 'text-orange-400' : 'text-gray-500';
+            return `<div class="prediction-item">
+                <span class="rank ${rankColor}">#${rank}</span>
+                <span class="num-badge ${color} ${rank === 1 ? 'highlight' : ''} text-[9px]" style="width:30px;height:30px;font-size:9px;">${p.number}</span>
+                <span class="prob">${p.confidence}%</span>
+                <span class="text-[6px] text-gray-500">${p.source || 'LOCAL'}</span>
+            </div>`;
+        }).join('');
+    }
+
+    // ============================================================
+    // DISPLAY PATTERNS
+    // ============================================================
+    function displayPatterns(results) {
+        if (results.length === 0) {
+            patternContainer.innerHTML = '<span class="text-gray-600">-</span>';
+            return;
+        }
+
+        // Extract patterns
+        const freq = {};
+        seedData.forEach(n => freq[n] = (freq[n] || 0) + 1);
+        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+        const top = sorted.slice(0, 3).map(n => n[0]);
+
+        // Gap analysis
+        let direction = 'STABLE';
+        if (seedData.length >= 4) {
+            let left = 0, right = 0;
+            for (let i = 1; i < Math.min(seedData.length, 15); i++) {
+                let gap = seedData[i] - seedData[i-1];
+                if (gap < -18) gap += 37;
+                if (gap > 18) gap -= 37;
+                if (gap < 0) left++;
+                else if (gap > 0) right++;
+            }
+            if (left > right * 1.5) direction = '⬅ KUSHOTO';
+            else if (right > left * 1.5) direction = 'KULIA ➡';
+        }
+
+        patternContainer.innerHTML = `
+            <div class="flex flex-wrap gap-2">
+                <div class="text-[7px]"><span class="text-gray-500">HOT:</span> <span class="text-green-400">${top.join(', ') || '-'}</span></div>
+                <div class="text-[7px]"><span class="text-gray-500">MWENDO:</span> <span class="text-yellow-400">${direction}</span></div>
+                <div class="text-[7px]"><span class="text-gray-500">SEED:</span> <span class="text-blue-400">${seedData.length}</span></div>
+            </div>
+        `;
+    }
+
+    // ============================================================
+    // DISPLAY BET SUGGESTIONS
+    // ============================================================
+    function displayBetSuggestions(preds) {
+        if (preds.length === 0) {
+            betSuggestions.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+            return;
+        }
+
+        const top = preds.slice(0, 5);
+        const nums = top.map(p => p.number);
+        const sortedNums = nums.sort((a, b) => a - b);
+
+        // Determine bet types
+        const first12 = nums.filter(n => n >= 1 && n <= 12);
+        const second12 = nums.filter(n => n >= 13 && n <= 24);
+        const third12 = nums.filter(n => n >= 25 && n <= 36);
+        const reds = nums.filter(n => COLORS[n] === 'red');
+        const blacks = nums.filter(n => COLORS[n] === 'black');
+
+        let suggestions = [];
+        
+        // Column bets
+        const col1 = nums.filter(n => n % 3 === 1);
+        const col2 = nums.filter(n => n % 3 === 2);
+        const col3 = nums.filter(n => n % 3 === 0);
+        
+        if (col1.length >= 2) suggestions.push({ type: 'COLUMN 1', nums: col1, strength: col1.length });
+        if (col2.length >= 2) suggestions.push({ type: 'COLUMN 2', nums: col2, strength: col2.length });
+        if (col3.length >= 2) suggestions.push({ type: 'COLUMN 3', nums: col3, strength: col3.length });
+
+        // Dozen bets
+        if (first12.length >= 2) suggestions.push({ type: '1ST 12 (1-12)', nums: first12, strength: first12.length });
+        if (second12.length >= 2) suggestions.push({ type: '2ND 12 (13-24)', nums: second12, strength: second12.length });
+        if (third12.length >= 2) suggestions.push({ type: '3RD 12 (25-36)', nums: third12, strength: third12.length });
+
+        // Color bets
+        if (reds.length >= 3) suggestions.push({ type: '🔴 RED', nums: reds, strength: reds.length });
+        if (blacks.length >= 3) suggestions.push({ type: '⚫ BLACK', nums: blacks, strength: blacks.length });
+
+        // High/Low
+        const lows = nums.filter(n => n >= 1 && n <= 18);
+        const highs = nums.filter(n => n >= 19 && n <= 36);
+        if (lows.length >= 3) suggestions.push({ type: '⬇ LOW (1-18)', nums: lows, strength: lows.length });
+        if (highs.length >= 3) suggestions.push({ type: '⬆ HIGH (19-36)', nums: highs, strength: highs.length });
+
+        // Neighbor bets (top 3)
+        if (nums.length >= 3) {
+            const top3 = nums.slice(0, 3);
+            suggestions.push({ type: '🎯 NEARBY', nums: top3, strength: top3.length });
+        }
+
+        // Sort by strength
+        suggestions.sort((a, b) => b.strength - a.strength);
+
+        betSuggestions.innerHTML = suggestions.slice(0, 6).map(s => 
+            `<div class="bet-suggestion">
+                <div class="label">${s.type}</div>
+                <div class="flex gap-0.5 mt-0.5">
+                    ${s.nums.map(n => `<span class="num-badge ${n === 0 ? 'gold' : COLORS[n]} text-[6px]" style="width:20px;height:20px;font-size:6px;">${n}</span>`).join('')}
+                    <span class="text-[6px] text-green-400 ml-1">(${s.strength}x)</span>
+                </div>
+            </div>`
+        ).join('') || '<span class="text-gray-600 text-[8px]">-</span>';
+    }
+
+    // ============================================================
+    // UPDATE CONFIDENCE
+    // ============================================================
+    function updateConfidence(preds) {
+        if (preds.length === 0) {
+            confidence = 0;
+            confidenceFill.style.width = '0%';
+            confidenceText.textContent = '0%';
+            return;
+        }
+
+        const avgConf = preds.reduce((sum, p) => sum + p.confidence, 0) / preds.length;
+        const boost = Math.min(20, seedData.length * 0.5);
+        confidence = Math.min(95, avgConf + boost);
+        
+        confidenceFill.style.width = confidence + '%';
+        confidenceText.textContent = Math.round(confidence) + '%';
+        
+        // Color based on confidence
+        if (confidence > 70) {
+            confidenceFill.className = 'h-full bg-green-400 rounded-full transition-all duration-500';
+        } else if (confidence > 50) {
+            confidenceFill.className = 'h-full bg-yellow-400 rounded-full transition-all duration-500';
+        } else {
+            confidenceFill.className = 'h-full bg-red-400 rounded-full transition-all duration-500';
+        }
+    }
+
+    // ============================================================
+    // QUICK FILL
+    // ============================================================
+    function quickFill(nums) {
+        nums.forEach(n => {
+            seedData.push(n);
+            historyData.push(n);
+        });
+        if (seedData.length > 50) seedData.splice(0, seedData.length - 50);
+        if (historyData.length > 200) historyData.splice(0, historyData.length - 200);
+        
+        updateSeedDisplay();
+        updateHistoryDisplay();
+        updateStats();
+        runAIAnalysis();
+        showToast(`✅ Namba ${nums.length} zimeongezwa kwenye Seed`);
+    }
+
+    // ============================================================
+    // CLEAR SEED
+    // ============================================================
+    function clearSeed() {
+        seedData = [];
+        updateSeedDisplay();
+        updateStats();
+        runAIAnalysis();
+        showToast('🗑️ Seed imefutwa');
+    }
+
+    // ============================================================
+    // CLEAR ALL
+    // ============================================================
+    function clearAll() {
+        seedData = [];
+        historyData = [];
+        predictions = [];
+        confidence = 0;
+        
+        seedContainer.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+        historyDisplay.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+        predictionsContainer.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+        patternContainer.innerHTML = '<span class="text-gray-600">-</span>';
+        betSuggestions.innerHTML = '<span class="text-gray-600 text-[8px]">-</span>';
+        confidenceFill.style.width = '0%';
+        confidenceText.textContent = '0%';
+        seedCount.textContent = '0';
+        uniqueCount.textContent = '0';
+        hotNumber.textContent = '-';
+        coldNumber.textContent = '-';
+        aiStatus.textContent = 'IDLE';
+        aiStatus.className = 'ai-status idle';
+        
+        showToast('🗑️ Yote imefutwa');
+    }
+
+    // ============================================================
+    // TOAST
+    // ============================================================
+    function showToast(msg) {
+        toast.textContent = msg;
+        toast.className = 'toast';
+        toast.style.color = '#FFD700';
+        setTimeout(() => { toast.className = 'toast hide'; }, 3000);
+    }
+
+    // ============================================================
+    // KEYBOARD SHORTCUTS
+    // ============================================================
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && document.activeElement === liveInput) {
+            e.preventDefault();
+            addLiveNumber();
+        }
+        if (e.ctrlKey && e.key === 'c') {
+            e.preventDefault();
+            clearAll();
+        }
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        showToast('🧠 Smart Brain iko tayari! Weka namba kuanza');
+        liveInput.focus();
+        
+        // Auto-run with sample data
+        setTimeout(() => {
+            quickFill([25,5,5,21,22,7,2,24,21,36,23,32]);
+        }, 500);
+    });
+</script>
+
+</body>
+</html>

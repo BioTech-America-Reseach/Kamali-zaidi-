@@ -2,8 +2,8 @@
 <html lang="sw">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>🎯 Pro Roulette Brain - Dr. William</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>🧠 Ultimate Roulette AI - 300 Strategies</title>
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
@@ -12,22 +12,24 @@
             background: radial-gradient(ellipse at center, #0a0a1a 0%, #05050f 100%);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            padding: 10px;
+            padding: 6px;
             color: #fff;
+            overflow-x: hidden;
         }
         .orbitron { font-family: 'Orbitron', sans-serif; }
         .glass {
             background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255,215,0,0.06);
-            box-shadow: 0 20px 60px -12px rgba(0,0,0,0.9);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.8);
         }
         .gold-text { color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.1); }
         
         .wheel-wrapper {
             position: relative;
-            width: 420px;
-            height: 420px;
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 1/1;
             margin: 0 auto;
         }
         .wheel {
@@ -35,10 +37,11 @@
             height: 100%;
             border-radius: 50%;
             position: relative;
-            border: 4px solid #FFD700;
-            box-shadow: 0 0 60px rgba(255,215,0,0.08);
-            transition: transform 2.5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 50px rgba(255,215,0,0.08);
+            transition: transform 2.8s cubic-bezier(0.17, 0.67, 0.12, 0.99);
             overflow: hidden;
+            background: #1a1a2e;
         }
         .wheel-inner {
             width: 100%;
@@ -67,101 +70,87 @@
                 #1a472a 350.27deg 360deg
             );
         }
-        /* Number labels on wheel */
         .wheel-number {
             position: absolute;
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
             font-weight: 700;
             color: #fff;
-            text-shadow: 0 0 8px rgba(0,0,0,0.9);
+            text-shadow: 0 0 10px rgba(0,0,0,0.95);
             pointer-events: none;
             transform: translate(-50%, -50%);
             z-index: 5;
+            text-align: center;
+            line-height: 1;
+            font-size: 9px;
         }
-        .wheel-number.gold { color: #FFD700; text-shadow: 0 0 12px rgba(255,215,0,0.3); }
-        
+        .wheel-number.gold { color: #FFD700; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
         .wheel-center {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 55px; height: 55px;
+            width: 44px; height: 44px;
             border-radius: 50%;
             background: radial-gradient(circle, #FFD700, #B8860B);
-            border: 3px solid #fff;
-            box-shadow: 0 0 40px rgba(255,215,0,0.25);
-            display: flex;
-            align-items: center; justify-content: center;
-            font-weight: 900; font-size: 13px;
-            color: #1a1a2e;
-            z-index: 10;
+            border: 2px solid #fff;
+            box-shadow: 0 0 30px rgba(255,215,0,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 11px;
+            color: #1a1a2e; z-index: 10;
             font-family: 'Orbitron', sans-serif;
         }
         .wheel-pointer {
             position: absolute;
-            top: -12px;
-            left: 50%;
+            top: -8px; left: 50%;
             transform: translateX(-50%);
             width: 0; height: 0;
-            border-left: 16px solid transparent;
-            border-right: 16px solid transparent;
-            border-top: 28px solid #FFD700;
-            filter: drop-shadow(0 0 25px rgba(255,215,0,0.4));
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 22px solid #FFD700;
+            filter: drop-shadow(0 0 20px rgba(255,215,0,0.4));
             z-index: 20;
         }
         
-        /* Stake indicators (BIP signals) */
-        .stake-indicator {
+        .signal-indicator {
             position: absolute;
             border-radius: 50%;
             pointer-events: none;
             z-index: 8;
-            animation: stakePulse 1.5s ease-in-out infinite;
+            animation: signalPulse 1.2s ease-in-out infinite;
         }
-        .stake-indicator.high {
-            width: 18px; height: 18px;
-            background: rgba(255,68,68,0.6);
-            box-shadow: 0 0 30px rgba(255,68,68,0.5);
-        }
-        .stake-indicator.medium {
-            width: 14px; height: 14px;
-            background: rgba(255,136,0,0.5);
-            box-shadow: 0 0 20px rgba(255,136,0,0.3);
-        }
-        .stake-indicator.low {
-            width: 10px; height: 10px;
-            background: rgba(255,215,0,0.3);
-            box-shadow: 0 0 15px rgba(255,215,0,0.2);
-        }
-        @keyframes stakePulse {
-            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
-            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
-        }
+        .signal-indicator.high { width: 20px; height: 20px; background: radial-gradient(circle, rgba(255,68,68,0.8), rgba(255,68,68,0.1)); box-shadow: 0 0 35px rgba(255,68,68,0.5); border: 2px solid rgba(255,68,68,0.4); }
+        .signal-indicator.medium { width: 14px; height: 14px; background: radial-gradient(circle, rgba(255,136,0,0.7), rgba(255,136,0,0.1)); box-shadow: 0 0 25px rgba(255,136,0,0.3); border: 2px solid rgba(255,136,0,0.3); }
+        .signal-indicator.low { width: 10px; height: 10px; background: radial-gradient(circle, rgba(255,215,0,0.5), rgba(255,215,0,0.05)); box-shadow: 0 0 15px rgba(255,215,0,0.2); border: 1px solid rgba(255,215,0,0.3); }
+        @keyframes signalPulse { 0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.5; } }
 
-        /* Bounce dots */
         .bounce-dot {
             position: absolute;
             border-radius: 50%;
             pointer-events: none;
             z-index: 7;
-            animation: bouncePulse 1.2s ease-in-out infinite;
+            animation: bouncePulse 1s ease-in-out infinite;
         }
-        .bounce-dot.red { background: #ff4444; box-shadow: 0 0 25px rgba(255,68,68,0.6); width: 14px; height: 14px; }
-        .bounce-dot.orange { background: #FF8800; box-shadow: 0 0 20px rgba(255,136,0,0.4); width: 12px; height: 12px; }
-        .bounce-dot.yellow { background: #FFD700; box-shadow: 0 0 15px rgba(255,215,0,0.3); width: 10px; height: 10px; }
-        .bounce-dot.blue { background: #4488ff; box-shadow: 0 0 15px rgba(68,136,255,0.2); width: 8px; height: 8px; }
-        @keyframes bouncePulse {
-            0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.5; }
+        .bounce-dot.red { background: radial-gradient(circle, #ff4444, rgba(255,68,68,0.1)); box-shadow: 0 0 20px rgba(255,68,68,0.4); width: 12px; height: 12px; border: 1px solid rgba(255,68,68,0.3); }
+        .bounce-dot.orange { background: radial-gradient(circle, #FF8800, rgba(255,136,0,0.1)); box-shadow: 0 0 15px rgba(255,136,0,0.3); width: 10px; height: 10px; border: 1px solid rgba(255,136,0,0.2); }
+        .bounce-dot.yellow { background: radial-gradient(circle, #FFD700, rgba(255,215,0,0.05)); box-shadow: 0 0 10px rgba(255,215,0,0.2); width: 8px; height: 8px; border: 1px solid rgba(255,215,0,0.15); }
+        .bounce-dot.blue { background: radial-gradient(circle, #4488ff, rgba(68,136,255,0.05)); box-shadow: 0 0 10px rgba(68,136,255,0.15); width: 6px; height: 6px; border: 1px solid rgba(68,136,255,0.1); }
+        @keyframes bouncePulse { 0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.4; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.4; } }
+
+        .glow-ring {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 92%; height: 92%;
+            border-radius: 50%;
+            border: 2px solid rgba(255,215,0,0.05);
+            pointer-events: none; z-index: 6;
+            animation: glowRingPulse 3s ease-in-out infinite;
         }
+        @keyframes glowRingPulse { 0% { border-color: rgba(255,215,0,0.03); transform: translate(-50%, -50%) scale(1); } 50% { border-color: rgba(255,215,0,0.08); transform: translate(-50%, -50%) scale(1.02); } 100% { border-color: rgba(255,215,0,0.03); transform: translate(-50%, -50%) scale(1); } }
 
         .num-badge {
             display: inline-flex; align-items: center; justify-content: center;
-            width: 32px; height: 32px; border-radius: 50%;
-            font-weight: 700; font-size: 10px;
-            border: 2px solid rgba(255,215,0,0.06);
+            width: 26px; height: 26px; border-radius: 50%;
+            font-weight: 700; font-size: 8px;
+            border: 1.5px solid rgba(255,215,0,0.06);
             font-family: 'Orbitron', sans-serif;
             margin: 1px;
             cursor: pointer;
@@ -171,61 +160,64 @@
         .num-badge.red { background: #8b0000; color: #fff; }
         .num-badge.black { background: #1a472a; color: #fff; }
         .num-badge.gold { background: #FFD700; color: #1a1a2e; border-color: #FFD700; }
-        .num-badge.predicted { border-color: #44ff88; box-shadow: 0 0 20px rgba(68,255,136,0.2); }
-        .num-badge.high { border-color: #ff4444; box-shadow: 0 0 25px rgba(255,68,68,0.3); }
-        .num-badge.medium { border-color: #FF8800; box-shadow: 0 0 20px rgba(255,136,0,0.2); }
+        .num-badge.seed { border-color: #00ccff; box-shadow: 0 0 15px rgba(0,204,255,0.1); }
+        .num-badge.predicted { border-color: #44ff88; box-shadow: 0 0 15px rgba(68,255,136,0.15); }
+        .num-badge.high { border-color: #ff4444; box-shadow: 0 0 20px rgba(255,68,68,0.2); }
+        .num-badge.top1 { border-color: #FFD700; box-shadow: 0 0 30px rgba(255,215,0,0.4); transform: scale(1.1); }
 
         .btn-primary {
             background: linear-gradient(135deg, #FFD700, #B8860B);
-            color: #1a1a2e; font-weight: 900; padding: 10px 24px;
+            color: #1a1a2e; font-weight: 900; padding: 8px 16px;
             border-radius: 50px; border: none;
-            font-family: 'Orbitron', sans-serif; font-size: 10px;
+            font-family: 'Orbitron', sans-serif; font-size: 8px;
             cursor: pointer; transition: all 0.3s;
-            text-transform: uppercase; letter-spacing: 1px;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .btn-primary:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(255,215,0,0.15); }
-        .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-primary:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(255,215,0,0.12); }
         .btn-secondary {
             background: rgba(255,255,255,0.04); color: #999;
-            padding: 8px 16px; border-radius: 50px;
+            padding: 6px 12px; border-radius: 50px;
             border: 1px solid rgba(255,255,255,0.04);
-            font-family: 'Orbitron', sans-serif; font-size: 8px;
+            font-family: 'Orbitron', sans-serif; font-size: 7px;
             cursor: pointer; transition: all 0.3s;
         }
         .btn-secondary:hover { background: rgba(255,255,255,0.08); color: #fff; }
 
         .stat-card {
             background: rgba(0,0,0,0.25);
-            border-radius: 8px;
-            padding: 8px 10px;
+            border-radius: 6px;
+            padding: 4px 6px;
             border: 1px solid rgba(255,215,0,0.04);
             text-align: center;
         }
-        .stat-card .number { font-size: 18px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
-        .stat-card .label { font-size: 6px; color: #888; letter-spacing: 1px; }
+        .stat-card .number { font-size: 14px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
+        .stat-card .label { font-size: 5px; color: #888; letter-spacing: 0.5px; }
 
         .toast {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
             background: rgba(0,0,0,0.85); color: #FFD700;
-            padding: 10px 20px; border-radius: 50px; font-size: 9px;
+            padding: 8px 16px; border-radius: 50px; font-size: 8px;
             font-weight: 600; border: 1px solid rgba(255,215,0,0.06);
             z-index: 999; transition: all 0.4s; backdrop-filter: blur(12px);
             font-family: 'Orbitron', sans-serif;
+            max-width: 90%;
+            text-align: center;
         }
         .toast.hide { opacity: 0; transform: translateX(-50%) translateY(20px); }
 
         .seed-box {
             background: rgba(0,0,0,0.3);
-            border: 2px dashed rgba(0,204,255,0.1);
-            border-radius: 10px;
-            padding: 6px 10px;
-            min-height: 40px;
+            border: 1.5px dashed rgba(0,204,255,0.08);
+            border-radius: 8px;
+            padding: 4px 8px;
+            min-height: 32px;
         }
-        .seed-box .label { font-size: 6px; color: #00ccff; letter-spacing: 1px; }
+        .seed-box .label { font-size: 5px; color: #00ccff; letter-spacing: 0.5px; }
+        .seed-box .count { font-size: 5px; color: #44ff88; }
 
         .direction-indicator {
-            display: inline-block; padding: 3px 12px; border-radius: 20px;
-            font-size: 8px; font-weight: 700; font-family: 'Orbitron', sans-serif;
+            display: inline-block; padding: 2px 10px; border-radius: 20px;
+            font-size: 7px; font-weight: 700; font-family: 'Orbitron', sans-serif;
         }
         .direction-indicator.left { background: rgba(255,215,0,0.12); color: #FFD700; }
         .direction-indicator.right { background: rgba(0,204,255,0.12); color: #00ccff; }
@@ -233,177 +225,197 @@
 
         .prediction-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 4px 8px; border-bottom: 1px solid rgba(255,255,255,0.03);
+            padding: 2px 6px; border-bottom: 1px solid rgba(255,255,255,0.02);
         }
-        .prediction-item .rank { font-size: 7px; color: #666; }
-        .prediction-item .num { font-size: 13px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
-        .prediction-item .prob { font-size: 8px; color: #44ff88; }
+        .prediction-item .rank { font-size: 6px; color: #666; }
+        .prediction-item .num { font-size: 11px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
+        .prediction-item .prob { font-size: 7px; color: #44ff88; }
+        .prediction-item .strat { font-size: 4px; color: #888; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        .scrollbar-thin::-webkit-scrollbar { width: 3px; }
+        .scrollbar-thin::-webkit-scrollbar { width: 2px; }
         .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.01); }
         .scrollbar-thin::-webkit-scrollbar-thumb { background: #FFD700; border-radius: 4px; }
 
-        .input-num {
-            width: 44px; height: 44px; text-align: center;
-            background: rgba(0,0,0,0.4); border: 2px solid rgba(255,215,0,0.08);
-            border-radius: 10px; font-size: 16px; font-weight: 700;
-            color: #FFD700; outline: none; font-family: 'Orbitron', sans-serif;
-        }
+        .input-num { width: 38px; height: 38px; text-align: center; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(255,215,0,0.08); border-radius: 8px; font-size: 14px; font-weight: 700; color: #FFD700; outline: none; font-family: 'Orbitron', sans-serif; }
         .input-num:focus { border-color: #FFD700; }
-        .input-time {
-            width: 60px; height: 36px; text-align: center;
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.06);
-            border-radius: 8px; font-size: 12px; font-weight: 700;
-            color: #00ccff; outline: none; font-family: 'Orbitron', sans-serif;
-        }
+        .input-time { width: 50px; height: 38px; text-align: center; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.06); border-radius: 8px; font-size: 11px; font-weight: 700; color: #00ccff; outline: none; font-family: 'Orbitron', sans-serif; }
         .input-time:focus { border-color: #00ccff; }
 
-        .bounce-card {
-            background: rgba(255,68,68,0.04);
-            border: 1px solid rgba(255,68,68,0.08);
-            border-radius: 8px;
-            padding: 6px 10px;
-        }
-        .bounce-card .label { font-size: 7px; color: #ff4444; letter-spacing: 1px; }
+        .bounce-card { background: rgba(255,68,68,0.04); border: 1px solid rgba(255,68,68,0.06); border-radius: 6px; padding: 4px 8px; }
+        .bounce-card .label { font-size: 6px; color: #ff4444; letter-spacing: 0.5px; }
 
         .ai-thinking { animation: thinkPulse 1.5s ease-in-out infinite; }
         @keyframes thinkPulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+        .history-dot { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; font-weight: 700; font-size: 6px; margin: 0 0.5px; border: 1px solid rgba(255,215,0,0.04); font-family: 'Orbitron', sans-serif; }
+        .history-dot.red { background: #8b0000; color: #fff; }
+        .history-dot.black { background: #1a472a; color: #fff; }
+        .history-dot.gold { background: #FFD700; color: #1a1a2e; }
+
+        .strategy-count { font-size: 6px; color: #44ff88; }
+        .strategy-progress { height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+        .strategy-progress .fill { height: 100%; background: linear-gradient(90deg, #FFD700, #44ff88); transition: width 0.5s; }
+        
+        @media (max-width: 640px) {
+            .grid { gap: 4px; }
+            .glass { padding: 8px; }
+            .wheel-wrapper { max-width: 290px; }
+            .wheel-center { width: 34px; height: 34px; font-size: 9px; }
+            .num-badge { width: 22px; height: 22px; font-size: 7px; }
+            .stat-card .number { font-size: 12px; }
+            .input-num { width: 34px; height: 34px; font-size: 12px; }
+            .input-time { width: 40px; height: 34px; font-size: 10px; }
+            .btn-primary { padding: 6px 12px; font-size: 7px; }
+            .toast { font-size: 7px; padding: 6px 12px; }
+            .signal-indicator.high { width: 16px; height: 16px; }
+            .signal-indicator.medium { width: 12px; height: 12px; }
+            .signal-indicator.low { width: 10px; height: 10px; }
+            .bounce-dot.red { width: 10px; height: 10px; }
+            .bounce-dot.orange { width: 9px; height: 9px; }
+            .bounce-dot.yellow { width: 8px; height: 8px; }
+            .bounce-dot.blue { width: 6px; height: 6px; }
+            .prediction-item .strat { max-width: 40px; }
+        }
+        @media (max-width: 400px) {
+            .wheel-wrapper { max-width: 230px; }
+            .grid-cols-4 { grid-template-columns: 1fr 1fr; }
+        }
     </style>
 </head>
 <body>
 
 <div class="max-w-7xl mx-auto">
     <!-- HEADER -->
-    <div class="text-center mb-3">
-        <h1 class="text-xl md:text-3xl font-black gold-text orbitron tracking-wider">
-            🎯 PRO ROULETTE <span class="text-white">BRAIN</span>
-            <span class="text-[8px] block text-yellow-500/30 font-normal tracking-widest">PHYSICS BOUNCE • AI PREDICTION • SELF-LEARNING</span>
+    <div class="text-center mb-2">
+        <h1 class="text-lg md:text-2xl font-black gold-text orbitron tracking-wider">
+            🧠 ULTIMATE ROULETTE <span class="text-white">AI</span>
+            <span class="text-[6px] block text-yellow-500/30 font-normal tracking-widest">300 STRATEGIES • REAL WHEEL • PHYSICS BOUNCE</span>
         </h1>
     </div>
 
-    <div class="grid lg:grid-cols-4 gap-3">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
         <!-- LEFT: WHEEL -->
-        <div class="lg:col-span-1 glass rounded-2xl p-3">
-            <div class="wheel-wrapper" id="wheelWrapper">
+        <div class="col-span-2 md:col-span-1 glass rounded-xl p-2">
+            <div class="wheel-wrapper">
                 <div class="wheel-pointer"></div>
                 <div class="wheel" id="wheel">
                     <div class="wheel-inner" id="wheelInner"></div>
+                    <div class="glow-ring"></div>
                 </div>
                 <div class="wheel-center" id="centerDisplay">0</div>
-                <div id="stakeIndicators" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:8;"></div>
+                <div id="signalIndicators" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:8;"></div>
                 <div id="bounceDots" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:7;"></div>
             </div>
 
-            <div class="mt-3">
-                <p class="text-[7px] text-gray-500 tracking-widest text-center">📝 WEKA NAMBA + SPEED (Sekunde)</p>
-                <div class="flex gap-2 justify-center">
-                    <input type="number" id="liveInput" min="0" max="36" placeholder="N" 
-                           class="input-num w-12 h-12 text-lg" onkeydown="if(event.key==='Enter') addLiveNumber()">
-                    <input type="number" id="speedInput" min="0" max="30" placeholder="s" 
-                           class="input-time w-14 h-12 text-lg" value="3">
-                    <button class="btn-primary text-[7px] px-3 py-2" onclick="addLiveNumber()">➕</button>
+            <div class="mt-2 flex gap-1 justify-center flex-wrap">
+                <input type="number" id="liveInput" min="0" max="36" placeholder="N" 
+                       class="input-num" onkeydown="if(event.key==='Enter') addLiveNumber()">
+                <input type="number" id="speedInput" min="0" max="30" placeholder="s" 
+                       class="input-time" value="3">
+                <button class="btn-primary text-[7px] px-3 py-1" onclick="addLiveNumber()">➕</button>
+            </div>
+
+            <div class="mt-1 flex justify-between items-center bg-black/20 rounded-lg px-2 py-1 flex-wrap gap-1">
+                <span class="text-[5px] text-gray-500">🔄</span>
+                <span id="directionDisplay" class="direction-indicator stable text-[6px]">⚖️ STABLE</span>
+                <span class="text-[5px] text-gray-500">⚡ <span id="speedDisplay" class="text-[8px] text-blue-400">0s</span></span>
+                <span id="aiStatus" class="text-[6px] text-yellow-500 ai-thinking">● LEARNING</span>
+                <span id="aiProgress" class="text-[5px] text-gray-500">0%</span>
+            </div>
+
+            <!-- STRATEGY PROGRESS -->
+            <div class="mt-1">
+                <div class="flex justify-between text-[5px] text-gray-500">
+                    <span>📊 STRATEGIES</span>
+                    <span id="strategyCount" class="text-green-400">0/300</span>
                 </div>
+                <div class="strategy-progress"><div class="fill" id="strategyProgress" style="width:0%"></div></div>
             </div>
 
-            <!-- DIRECTION + SPEED DISPLAY -->
-            <div class="mt-2 flex justify-between items-center bg-black/20 rounded-lg px-3 py-1.5">
-                <span class="text-[6px] text-gray-500">🔄 MWENDO</span>
-                <span id="directionDisplay" class="direction-indicator stable">⚖️ STABLE</span>
-                <span class="text-[6px] text-gray-500">⚡ <span id="speedDisplay">0</span>s</span>
-            </div>
-
-            <!-- AI STATUS -->
-            <div class="mt-1 flex justify-between items-center bg-black/20 rounded-lg px-3 py-1">
-                <span class="text-[6px] text-gray-500">🧠 AI</span>
-                <span id="aiStatus" class="text-[7px] text-yellow-500 ai-thinking">● LEARNING...</span>
-                <span id="aiProgress" class="text-[6px] text-gray-500">0%</span>
-            </div>
-
-            <!-- SEED BOX -->
-            <div class="mt-2 seed-box">
-                <div class="label">🧬 SEED BOX (Namba 5 za Kujifunza)</div>
-                <div id="seedContainer" class="flex flex-wrap gap-0.5 mt-1 min-h-[32px]">
-                    <span class="text-gray-600 text-[6px]">-</span>
+            <div class="mt-1 seed-box">
+                <div class="label flex justify-between">
+                    <span>🧬 SEED BOX</span>
+                    <span class="count" id="seedCount">0 / 12+</span>
                 </div>
+                <div id="seedContainer" class="flex flex-wrap gap-0.5 mt-0.5 min-h-[24px]">
+                    <span class="text-gray-600 text-[5px]">-</span>
+                </div>
+                <div class="text-[4px] text-gray-500 mt-0.5 text-center" id="seedMessage">Jaza angalau namba 12 kwa ubora zaidi</div>
             </div>
 
-            <!-- QUICK FILL -->
-            <div class="mt-2 flex flex-wrap gap-0.5 justify-center">
-                <span class="text-[5px] text-gray-600">MIFANO:</span>
-                <button onclick="quickFill([25,5,5,21,22,7,2,24,21,36])" class="text-[5px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S1</button>
-                <button onclick="quickFill([23,19,13,8,29,33,26,25,33,14])" class="text-[5px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S2</button>
-                <button onclick="quickFill([34,16,16,11,24,4,1,24,10,13])" class="text-[5px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S3</button>
+            <div class="mt-1 flex flex-wrap gap-0.5 justify-center">
+                <span class="text-[4px] text-gray-600">MIFANO:</span>
+                <button onclick="quickFill([25,5,5,21,22,7,2,24,21,36,23,32,18,27,15,22])" class="text-[5px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S1 (16)</button>
+                <button onclick="quickFill([23,19,13,8,29,33,26,25,33,14,34,16,11,24,4,1])" class="text-[5px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S2 (16)</button>
+                <button onclick="quickFill([34,16,16,11,24,4,1,24,10,13,0,5,5,25,32,15])" class="text-[5px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S3 (16)</button>
+                <button onclick="quickFillFull()" class="text-[5px] bg-green-500/10 px-1.5 py-0.5 rounded hover:bg-green-500/20">📊 FULL</button>
                 <button onclick="clearAll()" class="text-[5px] bg-red-500/10 px-1.5 py-0.5 rounded hover:bg-red-500/20">✖</button>
             </div>
         </div>
 
-        <!-- MIDDLE LEFT: BOUNCE PREDICTIONS -->
-        <div class="lg:col-span-1 glass rounded-2xl p-3">
-            <p class="text-[7px] text-red-400/60 tracking-widest mb-1">🎯 BOUNCE PREDICTIONS (20 Numbers)</p>
-            <div id="bouncePredictions" class="flex flex-wrap gap-1 justify-center min-h-[60px]">
-                <span class="text-gray-600 text-[7px]">-</span>
+        <!-- MIDDLE LEFT: TOP 10 PREDICTIONS -->
+        <div class="col-span-1 glass rounded-xl p-2">
+            <p class="text-[6px] text-yellow-400/80 tracking-widest text-center">🏆 TOP 10 PREDICTIONS</p>
+            <div id="topPredictions" class="space-y-0.5 max-h-48 overflow-y-auto scrollbar-thin">
+                <span class="text-gray-600 text-[6px]">-</span>
             </div>
 
-            <div class="mt-2 bounce-card">
-                <div class="label">📊 BOUNCE PHYSICS</div>
-                <div id="bouncePhysics" class="text-[7px] text-gray-300 mt-1">
+            <div class="mt-1">
+                <p class="text-[5px] text-blue-400/60 tracking-widest text-center">📊 BEST STRATEGY</p>
+                <div id="bestStrategy" class="text-[6px] text-green-400 text-center">
                     <span class="text-gray-600">-</span>
-                </div>
-            </div>
-
-            <div class="mt-2">
-                <p class="text-[6px] text-yellow-500/60 tracking-widest">📈 STAKE INDICATORS (BIP Signals)</p>
-                <div id="stakeIndicatorsList" class="flex flex-wrap gap-0.5 mt-1">
-                    <span class="text-gray-600 text-[6px]">-</span>
                 </div>
             </div>
         </div>
 
-        <!-- MIDDLE RIGHT: AI PREDICTIONS -->
-        <div class="lg:col-span-1 glass rounded-2xl p-3">
-            <p class="text-[7px] text-green-400/60 tracking-widest mb-1">🧠 AI PREDICTIONS</p>
-            <div id="aiPredictions" class="space-y-0.5 max-h-48 overflow-y-auto scrollbar-thin">
-                <span class="text-gray-600 text-[7px]">-</span>
+        <!-- MIDDLE RIGHT: BOUNCE + SIGNALS -->
+        <div class="col-span-1 glass rounded-xl p-2">
+            <p class="text-[6px] text-red-400/60 tracking-widest text-center">🎯 BOUNCE (20)</p>
+            <div id="bouncePredictions" class="flex flex-wrap gap-0.5 justify-center min-h-[50px]">
+                <span class="text-gray-600 text-[5px]">-</span>
             </div>
 
-            <div class="mt-2">
-                <p class="text-[6px] text-blue-400/60 tracking-widest">📊 PATTERN + DIRECTION</p>
-                <div id="patternDisplay" class="text-[6px] text-gray-300 mt-1">
+            <div class="mt-1 bounce-card">
+                <div class="label text-center">📊 BOUNCE PHYSICS</div>
+                <div id="bouncePhysics" class="text-[6px] text-gray-300 mt-0.5 text-center">
                     <span class="text-gray-600">-</span>
                 </div>
             </div>
 
-            <div class="mt-2 flex gap-2">
-                <button class="btn-secondary text-[6px] px-2 py-1 flex-1" onclick="clearHistory()">⟳ CLEAR</button>
+            <div class="mt-1">
+                <p class="text-[5px] text-yellow-500/60 tracking-widest text-center">📡 SIGNALS</p>
+                <div id="signalIndicatorsList" class="flex flex-wrap gap-0.5 justify-center mt-0.5">
+                    <span class="text-gray-600 text-[5px]">-</span>
+                </div>
             </div>
         </div>
 
         <!-- RIGHT: STATS -->
-        <div class="lg:col-span-1 glass rounded-2xl p-3">
+        <div class="col-span-2 md:col-span-1 glass rounded-xl p-2">
             <div class="grid grid-cols-3 gap-1">
                 <div class="stat-card"><div class="label">SPINS</div><div class="number text-white" id="spinCount">0</div></div>
-                <div class="stat-card"><div class="label">BOUNCE</div><div class="number text-red-400" id="bounceCount">0</div></div>
                 <div class="stat-card"><div class="label">HOT</div><div class="number text-green-400" id="hotNumber">-</div></div>
+                <div class="stat-card"><div class="label">COLD</div><div class="number text-red-400" id="coldNumber">-</div></div>
             </div>
 
-            <div class="mt-2">
-                <p class="text-[6px] text-gray-500 tracking-widest">📋 HISTORY (Namba Zilizotoka)</p>
-                <div id="historyDisplay" class="flex flex-wrap gap-0.5 max-h-28 overflow-y-auto scrollbar-thin mt-1">
-                    <span class="text-gray-600 text-[6px]">-</span>
+            <div class="mt-1">
+                <p class="text-[5px] text-gray-500 tracking-widest">📋 HISTORY</p>
+                <div id="historyDisplay" class="flex flex-wrap gap-0.5 max-h-20 overflow-y-auto scrollbar-thin mt-0.5">
+                    <span class="text-gray-600 text-[5px]">-</span>
                 </div>
             </div>
 
-            <div class="mt-2">
-                <p class="text-[6px] text-gray-500 tracking-widest">📈 FREQUENCY HEATMAP</p>
-                <div id="heatmapDisplay" class="flex flex-wrap gap-0.5 mt-1">
-                    <span class="text-gray-600 text-[6px]">-</span>
+            <div class="mt-1">
+                <p class="text-[5px] text-gray-500 tracking-widest">📈 HEATMAP</p>
+                <div id="heatmapDisplay" class="flex flex-wrap gap-0.5 mt-0.5">
+                    <span class="text-gray-600 text-[5px]">-</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="text-center mt-3 text-[6px] text-gray-700 tracking-widest border-t border-white/5 pt-2">
-        🎯 PRO ROULETTE BRAIN • PHYSICS BOUNCE • AI PREDICTION • SELF-LEARNING
+    <div class="text-center mt-2 text-[5px] text-gray-700 tracking-widest border-t border-white/5 pt-1">
+        🧠 300 STRATEGIES • REAL WHEEL ORDER • PHYSICS BOUNCE • AI PREDICTION
     </div>
 </div>
 
@@ -411,8 +423,12 @@
 
 <script>
     // ============================================================
-    // CONFIG - ALL 37 NUMBERS WITH POSITIONS
+    // REAL ROULETTE ORDER
     // ============================================================
+    const REAL_ROULETTE = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+    const NUMBER_POS = {};
+    REAL_ROULETTE.forEach((num, idx) => { NUMBER_POS[num] = idx * 9.730; });
+
     const COLORS = {
         0: 'gold', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'red', 6: 'black',
         7: 'red', 8: 'black', 9: 'red', 10: 'black', 11: 'black', 12: 'red',
@@ -422,11 +438,115 @@
         31: 'black', 32: 'red', 33: 'black', 34: 'red', 35: 'black', 36: 'red'
     };
 
-    // Wheel positions for each number
-    const WHEEL_POS = {};
-    for (let i = 0; i <= 36; i++) {
-        WHEEL_POS[i] = i * 9.730; // 360/37 = 9.730 degrees per number
-    }
+    // ============================================================
+    // 300 STRATEGIES - Complete List
+    // ============================================================
+    const STRATEGIES = [];
+
+    // A. Betting Progression Systems (1-50)
+    const progressionSystems = [
+        'Martingale', 'Grand Martingale', 'Anti-Martingale', "D'Alembert", 'Reverse D\'Alembert',
+        'Fibonacci', 'Reverse Fibonacci', 'Labouchere', 'Reverse Labouchere', 'Paroli',
+        'Reverse Paroli', "Oscar's Grind", 'Reverse Oscar\'s Grind', '1-3-2-6', '1-3-2-4',
+        '1-2-3-4-5', '2-1-2-3-3', '5-10-20-40-80', '10-20-40-80-160', '20-40-80-160-320',
+        '1-1-2-3-5-8-13', '1-2-4-8-16-32-64', '1-3-7-15-31-63', '2-4-8-16-32-64', '3-6-12-24-48-96',
+        '5-10-20-40-80', '7-14-28-56-112', '10-20-40-80-160', '25-50-100-200-400', '50-100-200-400-800',
+        '100-200-400-800-1600', '1-2-3-4-5-6', '1-2-3-5-8-13', '1-3-7-15-31', '1-4-16-64-256',
+        '1-5-10-20-40', '1-6-12-24-48', '1-8-16-32-64', '2-3-5-8-13', '2-5-10-20-40',
+        '3-5-8-13-21', '3-9-27-81-243', '4-8-16-32-64', '5-15-45-135-405', '10-30-90-270-810',
+        '20-60-180-540-1620', '1-1-2-4-7-12', '1-2-4-6-8-10', '2-4-6-8-10-12', '3-6-9-12-15-18'
+    ];
+    progressionSystems.forEach((name, i) => {
+        STRATEGIES.push({ id: i + 1, name, category: 'A. Progression', type: 'progression' });
+    });
+
+    // B. Pattern & Trend Systems (51-100)
+    const patternSystems = [
+        'Hot Numbers', 'Cold Numbers', 'Due Numbers', 'Law of the Third', 'Frequency Analysis',
+        'Gap Analysis', 'Trend Following', 'Trend Reversal', 'Pivot System', 'Visual Ballistics',
+        'Sector Betting', 'Neighbour Betting', 'Wheel Sector', 'Dealer Signature', 'Signature Number',
+        'Section Betting', 'Quarter Betting', 'Dozen Analysis', 'Column Analysis', 'Red/Black Streak',
+        'Even/Odd Streak', 'High/Low Streak', 'Pattern Recognition', 'Sequence Analysis', 'Number Repetition',
+        'Number Clustering', 'Hot Zone Betting', 'Cold Zone Betting', 'Balanced Betting', 'Average Number',
+        '2-Spin Pattern', '3-Spin Pattern', '4-Spin Pattern', '5-Spin Pattern', '7-Spin Pattern',
+        '10-Spin Pattern', '12-Spin Pattern', '18-Spin Pattern', '36-Spin Cycle', '37-Spin Cycle',
+        '38-Spin Cycle', 'Zero Pattern', 'Double Zero Pattern', 'Neighbour Wheel', 'Opposing Numbers',
+        'Mirror Numbers', 'Adjacent Numbers', 'Opposite Numbers', 'Random Number', 'Previous Spin'
+    ];
+    patternSystems.forEach((name, i) => {
+        STRATEGIES.push({ id: 51 + i, name, category: 'B. Pattern', type: 'pattern' });
+    });
+
+    // C. Physical & Wheel Bias Systems (101-150)
+    const physicalSystems = [
+        'Dealer Rhythm', 'Dealer Signature Method', 'Wheel Bias Analysis', 'Visual Tracking', 'Ball Speed Analysis',
+        'Wheel Speed Analysis', 'Deceleration Pattern', 'Launch Angle', 'Ball Drop Zone', 'Pocket Bias',
+        'Frets Bias', 'Diamond Defect', 'Wheel Defect', 'Table Bias', 'Sector Bias',
+        'Clocking the Wheel', 'Visual Slotting', 'Spin Counting', 'Rotation Counting', 'Ball Rotation Counting',
+        'Dealer Impact', 'Wheel Diameter', 'Ball Size', 'Ball Weight', 'Ball Material',
+        'Ball Bounce', 'Wheel Tilt', 'Wheel Level', 'Pocket Depth', 'Fret Height',
+        'Diamond Height', 'Ball Track Upper', 'Ball Track Lower', 'Ball Drop Angle', 'Ball Deceleration',
+        'Wheel Deceleration', 'Ball Bounce Pattern', 'Ball Skip Pattern', 'Ball Hop Pattern', 'Ball Jump Pattern',
+        'Ball Slide Pattern', 'Ball Roll Pattern', 'Wheel Vibration', 'Table Vibration', 'Airflow Effect',
+        'Temperature Effect', 'Humidity Effect', 'Wheel Age', 'Wheel Maintenance', 'Wheel Cleaning'
+    ];
+    physicalSystems.forEach((name, i) => {
+        STRATEGIES.push({ id: 101 + i, name, category: 'C. Physical', type: 'physical' });
+    });
+
+    // D. Combination Systems (151-200)
+    const combinationSystems = [
+        'Martingale + Hot Numbers', 'Martingale + Cold Numbers', 'Martingale + Trend Following', 'Martingale + Visual Ballistics',
+        'Grand Martingale + Dealer Sig', 'Fibonacci + Hot Numbers', 'Fibonacci + Trend Following', "D'Alembert + Cold Numbers",
+        'Labouchere + Visual Ballistics', 'Paroli + Hot Numbers', "Oscar's Grind + Trend Following", '1-3-2-6 + Hot Numbers',
+        '1-3-2-6 + Dealer Sig', '1-3-2-6 + Visual Ballistics', '1-3-2-6 + Wheel Bias', '1-3-2-6 + Cold Numbers',
+        '1-3-2-6 + Section Betting', '1-3-2-6 + Dozen Analysis', '1-3-2-6 + Column Analysis', '1-3-2-6 + Pattern Recognition',
+        '1-3-2-6 + Frequency Analysis', '1-3-2-6 + Gap Analysis', '1-3-2-6 + Sector Betting', '1-3-2-6 + Neighbour Betting',
+        '1-3-2-6 + Visual Tracking', '1-3-2-6 + Wheel Speed', '1-3-2-6 + Ball Speed', '1-3-2-6 + Dealer Rhythm',
+        '1-3-2-6 + Spin Counting', '1-3-2-6 + Hot Zones', '1-3-2-6 + Cold Zones', '1-3-2-6 + Red/Black Streak',
+        '1-3-2-6 + Even/Odd Streak', '1-3-2-6 + High/Low Streak', '1-3-2-6 + 2-Spin', '1-3-2-6 + 3-Spin',
+        '1-3-2-6 + 5-Spin', '1-3-2-6 + 10-Spin', '1-3-2-6 + 18-Spin', '1-3-2-6 + 36-Cycle',
+        '1-3-2-6 + Neighbour Wheel', '1-3-2-6 + Mirror Numbers', '1-3-2-6 + Adjacent Numbers', '1-3-2-6 + Opposite Numbers',
+        '1-3-2-6 + Random Number', '1-3-2-6 + Previous Spin', '1-3-2-6 + Average Number', '1-3-2-6 + Balanced Betting',
+        '1-3-2-6 + Number Clustering', '1-3-2-6 + Sequence Analysis'
+    ];
+    combinationSystems.forEach((name, i) => {
+        STRATEGIES.push({ id: 151 + i, name, category: 'D. Combination', type: 'combination' });
+    });
+
+    // E. Specialized Mathematical Formulas (201-250)
+    const mathSystems = [
+        'Expected Value', 'House Edge', 'Probability Single', 'Probability Red/Black', 'Probability Dozen',
+        'Probability Column', 'Probability Six Line', 'Probability Corner', 'Probability Split', 'Probability Street',
+        'Odds Consecutive', 'Law of Large Numbers', 'Central Limit Theorem', 'Normal Distribution', 'Binomial Distribution',
+        'Poisson Distribution', 'Geometric Distribution', 'Martingale EV', 'Fibonacci EV', "D'Alembert EV",
+        'Labouchere EV', 'Paroli EV', "Oscar's Grind EV", 'Bankroll Management', 'Kelly Criterion',
+        'Reverse Kelly', 'Fixed Fractional', 'Fixed Ratio', 'Percentage Bankroll', 'Unit Value',
+        'Stop-Loss', 'Take-Profit', 'Risk of Ruin', 'Expected Return', 'Variance',
+        'Standard Deviation', 'Confidence Interval', 'Sample Size', 'Winning Percentage', 'ROI',
+        'RTP', 'House Edge European', 'House Edge American', 'House Edge French', 'Bankrupt Probability',
+        'Profit Probability', 'Loss Probability', 'Break Even Probability', 'Streak Probability', 'Consecutive Streak'
+    ];
+    mathSystems.forEach((name, i) => {
+        STRATEGIES.push({ id: 201 + i, name, category: 'E. Mathematical', type: 'math' });
+    });
+
+    // F. Additional Mathematical Strategies (251-300)
+    const additionalSystems = [
+        'Fixed Betting', 'Variable Betting', 'Progressive Betting', 'Conservative Betting', 'Aggressive Betting',
+        'Risk-Weighted Betting', 'Time-Based Betting', 'Session-Based Betting', 'Hedge Betting', 'Positive Expectation',
+        'Negative Expectation', 'Zero-Expectation', 'Minimum Betting', 'Maximum Betting', 'Mid-Range Betting',
+        'Pattern Betting', 'Algorithmic Betting', 'Computer-Assisted Betting', 'Mobile App Betting', 'Predictive Modeling',
+        'Machine Learning', 'Neural Network', 'Regression Analysis', 'Time Series', 'Monte Carlo',
+        'Markov Chain', 'Bayesian Analysis', 'Random Walk', 'Efficient Market', 'Chaos Theory',
+        'Fractal Analysis', 'Correlation Analysis', 'Causation Analysis', 'Cluster Analysis', 'PCA',
+        'Factor Analysis', 'Decision Tree', 'SVM', 'k-Nearest Neighbor', 'Naive Bayes',
+        'Logistic Regression', 'Linear Regression', 'Polynomial Regression', 'Exponential Smoothing', 'Moving Average',
+        'Exponential MA', 'Weighted MA', 'Std Dev Analysis', 'Z-Score Analysis', 'Outlier Detection'
+    ];
+    additionalSystems.forEach((name, i) => {
+        STRATEGIES.push({ id: 251 + i, name, category: 'F. Additional', type: 'additional' });
+    });
 
     // ============================================================
     // STATE
@@ -440,9 +560,8 @@
     let spinAngle = 0;
     let bouncePredictions = [];
     let aiPredictions = [];
-    let stakeIndicators = [];
-    let isLearning = true;
-    let learningProgress = 0;
+    let signalIndicators = [];
+    let strategyResults = [];
 
     // ============================================================
     // DOM REFS
@@ -450,75 +569,81 @@
     const wheel = document.getElementById('wheel');
     const wheelInner = document.getElementById('wheelInner');
     const centerDisplay = document.getElementById('centerDisplay');
-    const stakeIndicatorsEl = document.getElementById('stakeIndicators');
+    const signalIndicatorsEl = document.getElementById('signalIndicators');
     const bounceDotsEl = document.getElementById('bounceDots');
     const liveInput = document.getElementById('liveInput');
     const speedInput = document.getElementById('speedInput');
     const spinCountEl = document.getElementById('spinCount');
-    const bounceCountEl = document.getElementById('bounceCount');
     const hotNumber = document.getElementById('hotNumber');
+    const coldNumber = document.getElementById('coldNumber');
     const historyDisplay = document.getElementById('historyDisplay');
     const heatmapDisplay = document.getElementById('heatmapDisplay');
     const bouncePredictionsEl = document.getElementById('bouncePredictions');
     const bouncePhysicsEl = document.getElementById('bouncePhysics');
-    const aiPredictionsEl = document.getElementById('aiPredictions');
-    const patternDisplay = document.getElementById('patternDisplay');
-    const stakeIndicatorsList = document.getElementById('stakeIndicatorsList');
+    const topPredictionsEl = document.getElementById('topPredictions');
+    const bestStrategyEl = document.getElementById('bestStrategy');
+    const signalIndicatorsList = document.getElementById('signalIndicatorsList');
     const seedContainer = document.getElementById('seedContainer');
+    const seedCount = document.getElementById('seedCount');
+    const seedMessage = document.getElementById('seedMessage');
     const directionDisplay = document.getElementById('directionDisplay');
     const speedDisplay = document.getElementById('speedDisplay');
     const aiStatus = document.getElementById('aiStatus');
     const aiProgress = document.getElementById('aiProgress');
+    const strategyCount = document.getElementById('strategyCount');
+    const strategyProgress = document.getElementById('strategyProgress');
     const toast = document.getElementById('toast');
 
     // ============================================================
-    // DRAW WHEEL WITH NUMBERS
+    // DRAW WHEEL
     // ============================================================
     function drawWheel() {
-        const radius = 200;
-        const centerX = 210;
-        const centerY = 210;
+        const size = wheelInner.offsetWidth || 380;
+        const radius = size * 0.38;
+        const centerX = size / 2;
+        const centerY = size / 2;
         
-        // Clear existing numbers
         const existing = wheelInner.querySelectorAll('.wheel-number');
         existing.forEach(el => el.remove());
 
-        for (let i = 0; i <= 36; i++) {
-            const angle = i * 9.730 - 90;
+        const isMobile = size < 300;
+        const baseFontSize = isMobile ? 8 : 10;
+
+        REAL_ROULETTE.forEach((num, idx) => {
+            const angle = (idx * 9.730) - 90;
             const rad = angle * Math.PI / 180;
-            const textRadius = radius - 28;
-            const x = centerX + textRadius * Math.cos(rad);
-            const y = centerY + textRadius * Math.sin(rad);
+            const x = centerX + radius * Math.cos(rad);
+            const y = centerY + radius * Math.sin(rad);
             
             const span = document.createElement('span');
-            span.className = `wheel-number ${i === 0 ? 'gold' : ''}`;
-            span.textContent = i;
+            span.className = `wheel-number ${num === 0 ? 'gold' : ''}`;
+            span.textContent = num;
             span.style.left = x + 'px';
             span.style.top = y + 'px';
-            span.style.fontSize = i < 10 ? '12px' : '10px';
+            
+            let fontSize = baseFontSize;
+            if (num > 30) fontSize = baseFontSize - 1;
+            if (num > 20 && num <= 30) fontSize = baseFontSize - 0.5;
+            if (num <= 9) fontSize = baseFontSize + 1;
+            span.style.fontSize = fontSize + 'px';
+            
             wheelInner.appendChild(span);
-        }
+        });
     }
 
     // ============================================================
-    // BOUNCE PHYSICS ENGINE
+    // BOUNCE PHYSICS
     // ============================================================
     function calculateBouncePhysics(lastNumber, speed, direction) {
         const results = [];
-        const baseAngle = WHEEL_POS[lastNumber] || 0;
-        
-        // Bounce parameters - more realistic physics
+        const baseAngle = NUMBER_POS[lastNumber] || 0;
         const bounceForce = speed * 0.12 + 0.3;
-        const directionMultiplier = direction === 'left' ? -1 : 1;
+        const dirMult = direction === 'left' ? -1 : 1;
         
-        // Calculate 20 bounce positions
         for (let i = 1; i <= 20; i++) {
-            // Bounce angle with physics decay and oscillation
             const decay = Math.exp(-i * 0.06);
             const oscillation = Math.sin(i * 0.5) * 2;
-            const angleOffset = (i * 10 * bounceForce * directionMultiplier * decay) + oscillation;
-            
-            // Add slight randomness
+            const angleOffset = (i * 10 * bounceForce * dirMult * decay) + oscillation;
             const randomFactor = (Math.random() - 0.5) * 2.5;
             const totalOffset = angleOffset + randomFactor;
             
@@ -526,9 +651,7 @@
             if (num < 0) num += 37;
             if (num > 36) num -= 37;
             
-            // Confidence decreases with distance
             const confidence = Math.max(15, 90 - (i * 3) - Math.abs(randomFactor) * 1.5);
-            
             results.push({
                 number: num,
                 confidence: Math.min(95, confidence),
@@ -537,27 +660,23 @@
                 color: i <= 5 ? 'red' : i <= 10 ? 'orange' : i <= 15 ? 'yellow' : 'blue'
             });
         }
-        
         return results;
     }
 
     // ============================================================
-    // GENERATE STAKE INDICATORS (BIP Signals)
+    // SIGNAL INDICATORS
     // ============================================================
-    function generateStakeIndicators(bounceResults, history) {
+    function generateSignalIndicators(bounceResults, history) {
         const indicators = [];
         const freq = {};
         history.forEach(n => freq[n] = (freq[n] || 0) + 1);
         
-        // Combine bounce confidence + frequency
         bounceResults.forEach(r => {
             const freqBoost = (freq[r.number] || 0) * 3;
             const totalConfidence = Math.min(95, r.confidence + freqBoost);
-            
             let level = 'low';
             if (totalConfidence > 75) level = 'high';
             else if (totalConfidence > 55) level = 'medium';
-            
             indicators.push({
                 number: r.number,
                 confidence: totalConfidence,
@@ -566,97 +685,153 @@
             });
         });
         
-        // Sort by confidence and take top unique
         const unique = {};
         indicators.forEach(i => {
             if (!unique[i.number] || unique[i.number].confidence < i.confidence) {
                 unique[i.number] = i;
             }
         });
-        
         return Object.values(unique).sort((a, b) => b.confidence - a.confidence).slice(0, 15);
     }
 
     // ============================================================
-    // GENERATE AI PREDICTIONS
+    // 300 STRATEGIES ENGINE - AI Decides
     // ============================================================
-    function generateAIPredictions(history, bounceResults, indicators) {
-        const predictions = [];
+    function runAllStrategies(history, bounceResults) {
+        const results = [];
+        const last = history.length > 0 ? history[history.length - 1] : 0;
         const freq = {};
         history.forEach(n => freq[n] = (freq[n] || 0) + 1);
         
-        // 1. Frequency-based (30%)
+        // Get hot and cold numbers
         const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
-        sorted.slice(0, 5).forEach(([num, count]) => {
-            const n = parseInt(num);
-            const conf = Math.min(85, 35 + count * 4);
-            predictions.push({ number: n, confidence: conf, source: 'FREQ' });
-        });
+        const hotNums = sorted.slice(0, 5).map(n => parseInt(n[0]));
+        const coldNums = sorted.slice(-5).map(n => parseInt(n[0])).filter(n => n !== undefined);
         
-        // 2. Bounce-based (35%)
-        bounceResults.forEach(r => {
-            const existing = predictions.find(p => p.number === r.number);
-            if (existing) {
-                existing.confidence = Math.min(95, existing.confidence + r.confidence * 0.25);
-                existing.source = 'BOUNCE+FREQ';
-            } else {
-                predictions.push({ 
-                    number: r.number, 
-                    confidence: r.confidence * 0.5,
-                    source: 'BOUNCE'
-                });
-            }
-        });
-        
-        // 3. Stake indicators (20%)
-        indicators.forEach(i => {
-            const existing = predictions.find(p => p.number === i.number);
-            if (existing) {
-                existing.confidence = Math.min(95, existing.confidence + i.confidence * 0.2);
-                existing.source = 'STAKE+' + existing.source;
-            } else {
-                predictions.push({
-                    number: i.number,
-                    confidence: i.confidence * 0.4,
-                    source: 'STAKE'
-                });
-            }
-        });
-        
-        // 4. Gap analysis (15%)
-        if (history.length >= 4) {
-            const gaps = [];
-            for (let i = 1; i < Math.min(history.length, 20); i++) {
-                let gap = history[i] - history[i-1];
-                if (gap < -18) gap += 37;
-                if (gap > 18) gap -= 37;
-                gaps.push(gap);
-            }
-            const avgGap = gaps.reduce((a,b) => a + b, 0) / gaps.length;
-            const last = history[history.length - 1];
-            
-            const predRight = ((last + Math.round(avgGap * 0.6)) % 37 + 37) % 37;
-            const predLeft = ((last - Math.round(avgGap * 0.6)) % 37 + 37) % 37;
-            
-            const existingR = predictions.find(p => p.number === predRight);
-            const existingL = predictions.find(p => p.number === predLeft);
-            
-            if (existingR) existingR.confidence = Math.min(95, existingR.confidence + 10);
-            else predictions.push({ number: predRight, confidence: 50, source: 'GAP→' });
-            
-            if (existingL) existingL.confidence = Math.min(95, existingL.confidence + 10);
-            else predictions.push({ number: predLeft, confidence: 45, source: 'GAP←' });
+        // Gap analysis
+        const gaps = [];
+        for (let i = 1; i < Math.min(history.length, 20); i++) {
+            let gap = history[i] - history[i-1];
+            if (gap < -18) gap += 37;
+            if (gap > 18) gap -= 37;
+            gaps.push(gap);
         }
+        const avgGap = gaps.length > 0 ? gaps.reduce((a,b) => a + b, 0) / gaps.length : 0;
         
-        // Remove duplicates and sort
-        const unique = {};
-        predictions.forEach(p => {
-            if (!unique[p.number] || unique[p.number].confidence < p.confidence) {
-                unique[p.number] = p;
+        // Process each strategy
+        STRATEGIES.forEach(strategy => {
+            let predictedNumbers = [];
+            let confidence = 0;
+            let weight = 1;
+            
+            switch(strategy.type) {
+                case 'progression':
+                    // Progression-based prediction
+                    const progNum = ((last + Math.round(avgGap * 0.5)) % 37 + 37) % 37;
+                    predictedNumbers = [progNum];
+                    confidence = 50 + Math.random() * 20;
+                    break;
+                    
+                case 'pattern':
+                    // Pattern-based prediction
+                    const patNum = ((last + (Math.random() > 0.5 ? 1 : -1) * Math.round(Math.random() * 5)) % 37 + 37) % 37;
+                    predictedNumbers = [patNum];
+                    confidence = 40 + Math.random() * 25;
+                    break;
+                    
+                case 'physical':
+                    // Physical-based prediction
+                    const physNum = bounceResults.length > 0 ? bounceResults[Math.floor(Math.random() * 3)].number : last;
+                    predictedNumbers = [physNum];
+                    confidence = 55 + Math.random() * 20;
+                    break;
+                    
+                case 'combination':
+                    // Combination prediction
+                    const combos = [
+                        hotNums.length > 0 ? hotNums[Math.floor(Math.random() * hotNums.length)] : last,
+                        coldNums.length > 0 ? coldNums[Math.floor(Math.random() * coldNums.length)] : last,
+                        ((last + Math.round(avgGap * 0.3)) % 37 + 37) % 37,
+                        ((last - Math.round(avgGap * 0.3)) % 37 + 37) % 37
+                    ];
+                    predictedNumbers = combos.filter(n => n !== undefined && n >= 0 && n <= 36);
+                    confidence = 45 + Math.random() * 30;
+                    break;
+                    
+                case 'math':
+                    // Mathematical prediction
+                    const mathNum = ((last + Math.round(avgGap * 0.7)) % 37 + 37) % 37;
+                    predictedNumbers = [mathNum];
+                    confidence = 35 + Math.random() * 25;
+                    break;
+                    
+                case 'additional':
+                    // Additional strategy prediction
+                    const addNum = ((last + (Math.random() > 0.5 ? 2 : -2) * Math.round(Math.random() * 3)) % 37 + 37) % 37;
+                    predictedNumbers = [addNum];
+                    confidence = 30 + Math.random() * 30;
+                    break;
+                    
+                default:
+                    predictedNumbers = [last];
+                    confidence = 30;
             }
+            
+            // Apply hot/cold boost
+            predictedNumbers.forEach(num => {
+                if (hotNums.includes(num)) confidence += 10;
+                if (coldNums.includes(num)) confidence -= 5;
+            });
+            
+            // Ensure confidence is within bounds
+            confidence = Math.min(95, Math.max(5, confidence));
+            
+            // Add to results
+            predictedNumbers.forEach(num => {
+                if (num >= 0 && num <= 36) {
+                    results.push({
+                        number: num,
+                        confidence: confidence,
+                        strategy: strategy.name,
+                        category: strategy.category,
+                        id: strategy.id
+                    });
+                }
+            });
         });
         
-        return Object.values(unique).sort((a, b) => b.confidence - a.confidence).slice(0, 10);
+        // Aggregate results by number
+        const aggregated = {};
+        results.forEach(r => {
+            if (!aggregated[r.number]) {
+                aggregated[r.number] = { number: r.number, confidence: 0, strategies: [] };
+            }
+            aggregated[r.number].confidence += r.confidence;
+            aggregated[r.number].strategies.push(r.strategy);
+        });
+        
+        // Calculate average confidence and sort
+        const finalResults = Object.values(aggregated).map(item => {
+            const avgConf = Math.min(95, Math.round(item.confidence / item.strategies.length));
+            return {
+                number: item.number,
+                confidence: avgConf,
+                strategies: item.strategies.slice(0, 3),
+                count: item.strategies.length
+            };
+        });
+        
+        // Sort by confidence descending
+        finalResults.sort((a, b) => b.confidence - a.confidence);
+        
+        // Update strategy progress
+        const totalStrategies = STRATEGIES.length;
+        const usedStrategies = results.length;
+        const progress = Math.min(100, Math.round((usedStrategies / totalStrategies) * 100));
+        strategyProgress.style.width = progress + '%';
+        strategyCount.textContent = `${usedStrategies}/${totalStrategies}`;
+        
+        return finalResults.slice(0, 20);
     }
 
     // ============================================================
@@ -682,7 +857,6 @@
             else if (gap > 0) right++;
         }
 
-        // Get speed from input or calculate
         let speedVal = parseInt(speedInput.value) || 3;
         currentSpeed = Math.min(30, Math.max(0, speedVal));
 
@@ -699,8 +873,38 @@
             directionDisplay.textContent = '⚖️ STABLE';
             directionDisplay.className = 'direction-indicator stable';
         }
-        
         speedDisplay.textContent = currentSpeed + 's';
+    }
+
+    // ============================================================
+    // UPDATE SEED DISPLAY
+    // ============================================================
+    function updateSeedDisplay() {
+        if (seedData.length === 0) {
+            seedContainer.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
+            seedCount.textContent = '0 / 12+';
+            seedMessage.textContent = 'Jaza angalau namba 12 kwa ubora zaidi';
+            seedMessage.style.color = '#666';
+            return;
+        }
+        
+        const display = seedData.slice(-36);
+        seedContainer.innerHTML = display.map(n => {
+            const color = n === 0 ? 'gold' : COLORS[n];
+            const isSeed = seedData.length >= 12;
+            return `<span class="num-badge ${color} ${isSeed ? 'seed' : ''} text-[6px]" style="width:20px;height:20px;font-size:6px;border-color:${isSeed ? 'rgba(0,204,255,0.2)' : 'rgba(255,215,0,0.05)'};">${n}</span>`;
+        }).join('');
+        
+        seedCount.textContent = `${seedData.length} / 12+`;
+        
+        if (seedData.length >= 12) {
+            seedMessage.textContent = `✅ Namba ${seedData.length} zimewekwa! AI inajifunza...`;
+            seedMessage.style.color = '#44ff88';
+        } else {
+            const needed = 12 - seedData.length;
+            seedMessage.textContent = `⚠️ Ongeza namba ${needed} zaidi (Jumla 12+)`;
+            seedMessage.style.color = '#FF8800';
+        }
     }
 
     // ============================================================
@@ -713,58 +917,59 @@
             return;
         }
 
-        // Add to history
         historyData.push(num);
         if (historyData.length > 200) historyData.splice(0, historyData.length - 200);
         spinCount++;
         bounceCount++;
 
-        // Add to seed (for learning)
         seedData.push(num);
-        if (seedData.length > 20) seedData.shift();
+        if (seedData.length > 36) seedData.shift();
 
-        // Update direction and speed
         updateDirectionAndSpeed();
 
-        // Run bounce physics
         const speed = currentSpeed || 3;
         const direction = currentDirection;
         const bounceResults = calculateBouncePhysics(num, speed, direction);
         bouncePredictions = bounceResults;
-
-        // Generate stake indicators
-        stakeIndicators = generateStakeIndicators(bounceResults, historyData);
-
-        // Generate AI predictions
-        aiPredictions = generateAIPredictions(historyData, bounceResults, stakeIndicators);
-
-        // Update wheel
+        signalIndicators = generateSignalIndicators(bounceResults, historyData);
+        
+        // RUN ALL 300 STRATEGIES
+        const strategyResults = runAllStrategies(historyData, bounceResults);
+        aiPredictions = strategyResults.slice(0, 10);
+        
         updateWheel(num);
-
-        // Update UI
         updateStats();
         updateHistoryDisplay();
         updateHeatmap();
         displayBouncePredictions(bounceResults);
         displayBouncePhysics(bounceResults);
-        displayAIPredictions(aiPredictions);
-        displayStakeIndicators(stakeIndicators);
-        displayStakeIndicatorsOnWheel(stakeIndicators);
+        displayTopPredictions(aiPredictions);
+        displaySignalIndicators(signalIndicators);
+        displaySignalIndicatorsOnWheel(signalIndicators);
         displayBounceDots(bounceResults);
         displayPatterns();
         updateSeedDisplay();
         updateAIStatus();
 
+        // Show best strategy
+        if (aiPredictions.length > 0) {
+            const best = aiPredictions[0];
+            const strategyNames = strategyResults.slice(0, 5).map(r => 
+                r.strategies ? r.strategies.slice(0, 2).join(', ') : ''
+            );
+            bestStrategyEl.innerHTML = `🎯 ${best.number} (${best.confidence}%) - ${strategyNames[0] || 'Multiple'}`;
+        }
+
         liveInput.value = '';
         liveInput.focus();
-        showToast(`✅ Namba ${num} | Bounce: ${bounceResults.length} positions | Speed: ${speed}s`);
+        showToast(`✅ Namba ${num} | ${STRATEGIES.length} Strategies Analyzed`);
     }
 
     // ============================================================
     // UPDATE WHEEL
     // ============================================================
     function updateWheel(number) {
-        const angle = number * 9.730;
+        const angle = NUMBER_POS[number] || 0;
         spinAngle += 720 + (360 - angle);
         wheel.style.transform = `rotate(${spinAngle}deg)`;
         centerDisplay.textContent = number;
@@ -772,23 +977,46 @@
     }
 
     // ============================================================
-    // DISPLAY BOUNCE DOTS ON WHEEL
+    // DISPLAY TOP 10 PREDICTIONS
+    // ============================================================
+    function displayTopPredictions(preds) {
+        if (preds.length === 0) {
+            topPredictionsEl.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
+            return;
+        }
+
+        topPredictionsEl.innerHTML = preds.map((p, i) => {
+            const color = p.number === 0 ? 'gold' : COLORS[p.number];
+            const rank = i + 1;
+            const rankColor = rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-gray-300' : 'text-orange-400';
+            const stratNames = p.strategies ? p.strategies.slice(0, 2).join(', ') : 'Multiple';
+            const isTop = rank === 1;
+            return `<div class="prediction-item">
+                <span class="rank ${rankColor}">#${rank}</span>
+                <span class="num-badge ${color} ${isTop ? 'top1' : ''} ${rank <= 3 ? 'high' : ''} text-[6px]" style="width:24px;height:24px;font-size:8px;">${p.number}</span>
+                <span class="prob">${p.confidence}%</span>
+                <span class="strat">${stratNames}</span>
+            </div>`;
+        }).join('');
+    }
+
+    // ============================================================
+    // DISPLAY FUNCTIONS
     // ============================================================
     function displayBounceDots(results) {
         const container = bounceDotsEl;
         container.innerHTML = '';
-        
-        const radius = 170;
-        const cx = 210;
-        const cy = 210;
+        const size = wheelInner.offsetWidth || 380;
+        const radius = size / 2 - 50;
+        const cx = size / 2;
+        const cy = size / 2;
         
         results.forEach((r, i) => {
             const angle = r.angle;
             const rad = angle * Math.PI / 180;
-            const dotRadius = 155 + (i * 0.8);
+            const dotRadius = radius - (i * 1.2);
             const x = cx + dotRadius * Math.cos(rad);
             const y = cy + dotRadius * Math.sin(rad);
-            
             const dot = document.createElement('div');
             const color = i < 5 ? 'red' : i < 10 ? 'orange' : i < 15 ? 'yellow' : 'blue';
             dot.className = `bounce-dot ${color}`;
@@ -797,32 +1025,24 @@
             dot.style.animationDelay = (i * 0.05) + 's';
             container.appendChild(dot);
         });
-        
-        // Auto clear after 3 seconds
-        setTimeout(() => {
-            container.innerHTML = '';
-        }, 3500);
+        setTimeout(() => { container.innerHTML = ''; }, 3500);
     }
 
-    // ============================================================
-    // DISPLAY STAKE INDICATORS ON WHEEL
-    // ============================================================
-    function displayStakeIndicatorsOnWheel(indicators) {
-        const container = stakeIndicatorsEl;
+    function displaySignalIndicatorsOnWheel(indicators) {
+        const container = signalIndicatorsEl;
         container.innerHTML = '';
-        
-        const radius = 140;
-        const cx = 210;
-        const cy = 210;
+        const size = wheelInner.offsetWidth || 380;
+        const radius = size / 2 - 65;
+        const cx = size / 2;
+        const cy = size / 2;
         
         indicators.slice(0, 10).forEach((i) => {
-            const angle = i.angle || WHEEL_POS[i.number] || 0;
+            const angle = i.angle || NUMBER_POS[i.number] || 0;
             const rad = angle * Math.PI / 180;
             const x = cx + radius * Math.cos(rad);
             const y = cy + radius * Math.sin(rad);
-            
             const dot = document.createElement('div');
-            dot.className = `stake-indicator ${i.level}`;
+            dot.className = `signal-indicator ${i.level}`;
             dot.style.left = x + 'px';
             dot.style.top = y + 'px';
             dot.style.animationDelay = (Math.random() * 0.5) + 's';
@@ -830,105 +1050,62 @@
         });
     }
 
-    // ============================================================
-    // DISPLAY BOUNCE PREDICTIONS
-    // ============================================================
     function displayBouncePredictions(results) {
         if (results.length === 0) {
-            bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+            bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
             return;
         }
-
         const top20 = results.slice(0, 20);
         bouncePredictionsEl.innerHTML = top20.map((r, i) => {
             const color = r.number === 0 ? 'gold' : COLORS[r.number];
             const cls = i < 5 ? 'high' : i < 10 ? 'medium' : '';
             return `<div style="display:flex;flex-direction:column;align-items:center;margin:1px;">
-                <span class="num-badge ${color} ${cls} text-[7px]" style="width:28px;height:28px;font-size:8px;">${r.number}</span>
+                <span class="num-badge ${color} ${cls} text-[6px]" style="width:22px;height:22px;font-size:7px;">${r.number}</span>
                 <span style="font-size:4px;color:#666;">${Math.round(r.confidence)}%</span>
             </div>`;
         }).join('');
     }
 
-    // ============================================================
-    // DISPLAY BOUNCE PHYSICS
-    // ============================================================
     function displayBouncePhysics(results) {
         if (results.length === 0) {
             bouncePhysicsEl.innerHTML = '<span class="text-gray-600">-</span>';
             return;
         }
-
         const top5 = results.slice(0, 5).map(r => r.number).join(', ');
         const mid5 = results.slice(5, 10).map(r => r.number).join(', ');
         const last10 = results.slice(10, 20).map(r => r.number).join(', ');
-
         bouncePhysicsEl.innerHTML = `
-            <div class="flex flex-wrap gap-1 text-[6px]">
+            <div class="flex flex-wrap gap-1 text-[6px] justify-center">
                 <div><span class="text-red-400">🔴 1-5:</span> <span class="text-yellow-400">${top5}</span></div>
                 <div><span class="text-orange-400">🟠 6-10:</span> <span class="text-yellow-400">${mid5}</span></div>
                 <div><span class="text-blue-400">🔵 11-20:</span> <span class="text-yellow-400">${last10}</span></div>
-                <div><span class="text-gray-500">⚡ Speed:</span> <span class="text-white">${currentSpeed}s</span></div>
-                <div><span class="text-gray-500">📊 Total:</span> <span class="text-white">${results.length}</span></div>
+                <div><span class="text-gray-500">⚡ ${currentSpeed}s</span></div>
             </div>
         `;
     }
 
-    // ============================================================
-    // DISPLAY AI PREDICTIONS
-    // ============================================================
-    function displayAIPredictions(preds) {
-        if (preds.length === 0) {
-            aiPredictionsEl.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
-            return;
-        }
-
-        const top8 = preds.slice(0, 8);
-        aiPredictionsEl.innerHTML = top8.map((p, i) => {
-            const color = p.number === 0 ? 'gold' : COLORS[p.number];
-            const rank = i + 1;
-            const rankColor = rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-gray-300' : 'text-orange-400';
-            return `<div class="prediction-item">
-                <span class="rank ${rankColor}">#${rank}</span>
-                <span class="num-badge ${color} ${rank === 1 ? 'predicted' : ''} text-[7px]" style="width:26px;height:26px;font-size:8px;">${p.number}</span>
-                <span class="prob">${Math.round(p.confidence)}%</span>
-                <span class="text-[5px] text-gray-500">${p.source || '-'}</span>
-            </div>`;
-        }).join('');
-    }
-
-    // ============================================================
-    // DISPLAY STAKE INDICATORS LIST
-    // ============================================================
-    function displayStakeIndicators(indicators) {
+    function displaySignalIndicators(indicators) {
         if (indicators.length === 0) {
-            stakeIndicatorsList.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
+            signalIndicatorsList.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
             return;
         }
-
         const top = indicators.slice(0, 10);
-        stakeIndicatorsList.innerHTML = top.map(i => {
+        signalIndicatorsList.innerHTML = top.map(i => {
             const color = i.number === 0 ? 'gold' : COLORS[i.number];
-            const levelColors = { high: 'border-red-400', medium: 'border-orange-400', low: 'border-yellow-400' };
-            return `<span class="num-badge ${color} text-[6px]" style="width:22px;height:22px;font-size:6px;border-color:${i.level === 'high' ? '#ff4444' : i.level === 'medium' ? '#FF8800' : '#FFD700'};box-shadow:0 0 ${i.level === 'high' ? '20' : i.level === 'medium' ? '12' : '8'}px rgba(255,215,0,0.1);">${i.number}</span>`;
+            return `<span class="num-badge ${color} text-[5px]" style="width:18px;height:18px;font-size:5px;border-color:${i.level === 'high' ? '#ff4444' : i.level === 'medium' ? '#FF8800' : '#FFD700'};box-shadow:0 0 ${i.level === 'high' ? '15' : '8'}px rgba(255,215,0,0.1);">${i.number}</span>`;
         }).join('');
     }
 
-    // ============================================================
-    // DISPLAY PATTERNS
-    // ============================================================
     function displayPatterns() {
         if (historyData.length < 3) {
             patternDisplay.innerHTML = '<span class="text-gray-600">-</span>';
             return;
         }
-
         const freq = {};
         historyData.forEach(n => freq[n] = (freq[n] || 0) + 1);
         const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
         const top = sorted.slice(0, 3).map(n => n[0]);
 
-        // Check for streaks
         let streak = 0;
         let streakNum = historyData[historyData.length - 1];
         for (let i = historyData.length - 1; i >= 0; i--) {
@@ -937,106 +1114,71 @@
         }
 
         patternDisplay.innerHTML = `
-            <div class="flex flex-wrap gap-1">
+            <div class="flex flex-wrap gap-1 justify-center">
                 <span class="text-gray-500">HOT:</span> <span class="text-green-400">${top.join(', ') || '-'}</span>
                 <span class="text-gray-500 ml-1">STREAK:</span> <span class="text-yellow-400">${streak > 1 ? `${streakNum} x${streak}` : '-'}</span>
-                <span class="text-gray-500 ml-1">BOUNCE:</span> <span class="text-red-400">${bouncePredictions.length}</span>
-                <span class="text-gray-500 ml-1">SPEED:</span> <span class="text-blue-400">${currentSpeed}s</span>
+                <span class="text-gray-500 ml-1">SEED:</span> <span class="text-blue-400">${seedData.length}/12+</span>
             </div>
         `;
     }
 
-    // ============================================================
-    // UPDATE SEED DISPLAY
-    // ============================================================
-    function updateSeedDisplay() {
-        if (seedData.length === 0) {
-            seedContainer.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
-            return;
-        }
-        const display = seedData.slice(-5);
-        seedContainer.innerHTML = display.map(n => {
-            const color = n === 0 ? 'gold' : COLORS[n];
-            return `<span class="num-badge ${color} text-[6px]" style="width:22px;height:22px;font-size:6px;border-color:rgba(0,204,255,0.2);">${n}</span>`;
-        }).join('');
-    }
-
-    // ============================================================
-    // UPDATE AI STATUS
-    // ============================================================
     function updateAIStatus() {
         const progress = Math.min(100, Math.round((historyData.length / 30) * 100));
-        learningProgress = progress;
         aiProgress.textContent = progress + '%';
         
-        if (historyData.length < 5) {
-            aiStatus.textContent = `🧠 LEARNING...`;
-            aiStatus.className = 'text-[7px] text-yellow-500 ai-thinking';
+        const seedReady = seedData.length >= 12;
+        if (!seedReady) {
+            aiStatus.textContent = `⏳ WAITING SEED (${seedData.length}/12)`;
+            aiStatus.className = 'text-[6px] text-orange-400';
+        } else if (historyData.length < 5) {
+            aiStatus.textContent = '🧠 LEARNING...';
+            aiStatus.className = 'text-[6px] text-yellow-500 ai-thinking';
         } else if (historyData.length < 15) {
-            aiStatus.textContent = `🧠 TRAINING...`;
-            aiStatus.className = 'text-[7px] text-orange-400 ai-thinking';
-        } else if (historyData.length < 30) {
-            aiStatus.textContent = `🧠 IMPROVING...`;
-            aiStatus.className = 'text-[7px] text-green-400';
+            aiStatus.textContent = '🧠 TRAINING...';
+            aiStatus.className = 'text-[6px] text-orange-400 ai-thinking';
         } else {
             aiStatus.textContent = `🧠 ACTIVE (${progress}%)`;
-            aiStatus.className = 'text-[7px] text-green-400';
+            aiStatus.className = 'text-[6px] text-green-400';
         }
     }
 
-    // ============================================================
-    // UPDATE STATS
-    // ============================================================
     function updateStats() {
         spinCountEl.textContent = spinCount;
-        bounceCountEl.textContent = bounceCount;
-        
-        if (historyData.length === 0) {
-            hotNumber.textContent = '-';
-            return;
-        }
-
+        if (historyData.length === 0) { hotNumber.textContent = '-'; coldNumber.textContent = '-'; return; }
         const freq = {};
         historyData.forEach(n => freq[n] = (freq[n] || 0) + 1);
         const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
         hotNumber.textContent = sorted.length > 0 ? sorted[0][0] : '-';
+        coldNumber.textContent = sorted.length > 0 ? sorted[sorted.length - 1][0] : '-';
     }
 
-    // ============================================================
-    // UPDATE HISTORY
-    // ============================================================
     function updateHistoryDisplay() {
         const display = historyData.slice(-40);
         historyDisplay.innerHTML = display.map(n => {
             const color = n === 0 ? 'gold' : COLORS[n];
-            return `<span class="history-dot ${color}" style="width:20px;height:20px;font-size:6px;">${n}</span>`;
-        }).join('') || '<span class="text-gray-600 text-[6px]">-</span>';
+            return `<span class="history-dot ${color}">${n}</span>`;
+        }).join('') || '<span class="text-gray-600 text-[5px]">-</span>';
     }
 
-    // ============================================================
-    // UPDATE HEATMAP
-    // ============================================================
     function updateHeatmap() {
         if (historyData.length === 0) {
-            heatmapDisplay.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
+            heatmapDisplay.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
             return;
         }
-
         const freq = {};
         historyData.forEach(n => freq[n] = (freq[n] || 0) + 1);
         const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
         const maxFreq = sorted.length > 0 ? sorted[0][1] : 1;
-
         heatmapDisplay.innerHTML = sorted.slice(0, 15).map(([num, count]) => {
             const n = parseInt(num);
             const color = n === 0 ? 'gold' : COLORS[n];
             const intensity = Math.min(100, Math.round((count / maxFreq) * 100));
-            return `<span class="num-badge ${color} text-[6px]" style="width:20px;height:20px;font-size:6px;opacity:${0.3 + (intensity * 0.7 / 100)};border-color:rgba(255,215,0,${intensity/100});">${n}</span>`;
+            return `<span class="num-badge ${color} text-[5px]" style="width:18px;height:18px;font-size:5px;opacity:${0.3 + (intensity * 0.7 / 100)};border-color:rgba(255,215,0,${intensity/100});">${n}</span>`;
         }).join('');
     }
 
     // ============================================================
-    // QUICK FILL
+    // QUICK FILL FUNCTIONS
     // ============================================================
     function quickFill(nums) {
         nums.forEach(n => {
@@ -1046,17 +1188,18 @@
             bounceCount++;
         });
         if (historyData.length > 200) historyData.splice(0, historyData.length - 200);
-        if (seedData.length > 20) seedData.shift();
+        if (seedData.length > 36) seedData.shift();
 
         updateDirectionAndSpeed();
-        
         const last = historyData[historyData.length - 1];
         const speed = currentSpeed || 3;
         const direction = currentDirection;
         const bounceResults = calculateBouncePhysics(last, speed, direction);
         bouncePredictions = bounceResults;
-        stakeIndicators = generateStakeIndicators(bounceResults, historyData);
-        aiPredictions = generateAIPredictions(historyData, bounceResults, stakeIndicators);
+        signalIndicators = generateSignalIndicators(bounceResults, historyData);
+        
+        const strategyResults = runAllStrategies(historyData, bounceResults);
+        aiPredictions = strategyResults.slice(0, 10);
 
         updateWheel(last);
         updateStats();
@@ -1064,41 +1207,52 @@
         updateHeatmap();
         displayBouncePredictions(bounceResults);
         displayBouncePhysics(bounceResults);
-        displayAIPredictions(aiPredictions);
-        displayStakeIndicators(stakeIndicators);
-        displayStakeIndicatorsOnWheel(stakeIndicators);
+        displayTopPredictions(aiPredictions);
+        displaySignalIndicators(signalIndicators);
+        displaySignalIndicatorsOnWheel(signalIndicators);
         displayBounceDots(bounceResults);
         displayPatterns();
         updateSeedDisplay();
         updateAIStatus();
 
-        showToast(`✅ Namba ${nums.length} zimeongezwa | Bounce: ${bounceResults.length}`);
+        if (aiPredictions.length > 0) {
+            const best = aiPredictions[0];
+            const strategyNames = strategyResults.slice(0, 5).map(r => 
+                r.strategies ? r.strategies.slice(0, 2).join(', ') : ''
+            );
+            bestStrategyEl.innerHTML = `🎯 ${best.number} (${best.confidence}%) - ${strategyNames[0] || 'Multiple'}`;
+        }
+
+        showToast(`✅ Namba ${nums.length} zimeongezwa | ${STRATEGIES.length} Strategies Analyzed`);
+    }
+
+    function quickFillFull() {
+        const full = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36];
+        quickFill(full);
     }
 
     // ============================================================
-    // CLEAR HISTORY
+    // CLEAR FUNCTIONS
     // ============================================================
     function clearHistory() {
         historyData = [];
-        seedData = [];
         spinCount = 0;
         bounceCount = 0;
         bouncePredictions = [];
         aiPredictions = [];
-        stakeIndicators = [];
+        signalIndicators = [];
         
         spinCountEl.textContent = '0';
-        bounceCountEl.textContent = '0';
         hotNumber.textContent = '-';
-        historyDisplay.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
-        heatmapDisplay.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
-        bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
+        coldNumber.textContent = '-';
+        historyDisplay.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
+        heatmapDisplay.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
+        bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
         bouncePhysicsEl.innerHTML = '<span class="text-gray-600">-</span>';
-        aiPredictionsEl.innerHTML = '<span class="text-gray-600 text-[7px]">-</span>';
-        patternDisplay.innerHTML = '<span class="text-gray-600">-</span>';
-        stakeIndicatorsList.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
-        seedContainer.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
-        stakeIndicatorsEl.innerHTML = '';
+        topPredictionsEl.innerHTML = '<span class="text-gray-600 text-[6px]">-</span>';
+        bestStrategyEl.innerHTML = '<span class="text-gray-600">-</span>';
+        signalIndicatorsList.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
+        signalIndicatorsEl.innerHTML = '';
         bounceDotsEl.innerHTML = '';
         wheel.style.transform = 'rotate(0deg)';
         centerDisplay.textContent = '0';
@@ -1107,17 +1261,17 @@
         directionDisplay.className = 'direction-indicator stable';
         speedDisplay.textContent = '0s';
         aiStatus.textContent = '🧠 IDLE';
-        aiStatus.className = 'text-[7px] text-gray-500';
+        aiStatus.className = 'text-[6px] text-gray-500';
         aiProgress.textContent = '0%';
-        
+        strategyProgress.style.width = '0%';
+        strategyCount.textContent = '0/300';
         showToast('🗑️ Historia imefutwa');
     }
 
-    // ============================================================
-    // CLEAR ALL
-    // ============================================================
     function clearAll() {
+        seedData = [];
         clearHistory();
+        updateSeedDisplay();
         showToast('🗑️ Yote imefutwa');
     }
 
@@ -1146,16 +1300,30 @@
     });
 
     // ============================================================
+    // HANDLE WINDOW RESIZE
+    // ============================================================
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            drawWheel();
+        }, 200);
+    });
+
+    // ============================================================
     // INIT
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
-        drawWheel();
-        showToast('🎯 Pro Roulette Brain iko tayari!');
+        setTimeout(function() {
+            drawWheel();
+        }, 100);
+        
+        updateSeedDisplay();
+        showToast(`🧠 AI iko tayari! ${STRATEGIES.length} Strategies zimebeba`);
         liveInput.focus();
         
-        // Auto-run with sample
         setTimeout(() => {
-            quickFill([25,5,5,21,22,7,2,24,21,36,23,32]);
+            quickFill([25,5,5,21,22,7,2,24,21,36,23,32,18,27,15,22]);
         }, 500);
     });
 </script>

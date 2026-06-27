@@ -31,14 +31,12 @@
             box-shadow: 0 10px 40px -10px rgba(0,0,0,0.8);
         }
         .gold-text { color: var(--gold); text-shadow: 0 0 30px rgba(255,215,0,0.1); }
-        .gold-border { border-color: var(--gold); }
-        .gold-bg { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); }
-        
+
         /* WHEEL */
         .wheel-wrapper {
             position: relative;
             width: 100%;
-            max-width: 340px;
+            max-width: 300px;
             aspect-ratio: 1/1;
             margin: 0 auto;
         }
@@ -91,20 +89,20 @@
             z-index: 5;
             text-align: center;
             line-height: 1;
-            font-size: 9px;
+            font-size: 8px;
         }
         .wheel-number.gold { color: var(--gold); text-shadow: 0 0 15px rgba(255,215,0,0.3); }
         .wheel-center {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 40px; height: 40px;
+            width: 36px; height: 36px;
             border-radius: 50%;
             background: radial-gradient(circle, var(--gold), var(--gold-dark));
             border: 2px solid #fff;
             box-shadow: 0 0 30px rgba(255,215,0,0.2);
             display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 10px;
+            font-weight: 900; font-size: 9px;
             color: #1a1a2e; z-index: 10;
             font-family: 'Orbitron', sans-serif;
         }
@@ -119,49 +117,142 @@
             filter: drop-shadow(0 0 20px rgba(255,215,0,0.4));
             z-index: 20;
         }
-        
-        .signal-indicator {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 8;
-            animation: signalPulse 1.2s ease-in-out infinite;
-        }
-        .signal-indicator.high { width: 16px; height: 16px; background: radial-gradient(circle, rgba(255,68,68,0.8), rgba(255,68,68,0.1)); box-shadow: 0 0 25px rgba(255,68,68,0.4); border: 2px solid rgba(255,68,68,0.4); }
-        .signal-indicator.medium { width: 12px; height: 12px; background: radial-gradient(circle, rgba(255,136,0,0.6), rgba(255,136,0,0.1)); box-shadow: 0 0 18px rgba(255,136,0,0.3); border: 2px solid rgba(255,136,0,0.3); }
-        .signal-indicator.low { width: 10px; height: 10px; background: radial-gradient(circle, rgba(255,215,0,0.4), rgba(255,215,0,0.05)); box-shadow: 0 0 12px rgba(255,215,0,0.2); border: 1px solid rgba(255,215,0,0.3); }
-        @keyframes signalPulse { 0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.5; } }
 
-        .bounce-dot {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 7;
-            animation: bouncePulse 1s ease-in-out infinite;
+        /* ROULETTE TABLE - CORRECT LAYOUT */
+        .roulette-table {
+            display: grid;
+            grid-template-columns: 36px repeat(12, 1fr);
+            gap: 2px;
+            background: rgba(0,40,20,0.4);
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid rgba(255,215,0,0.06);
+            min-width: 280px;
         }
-        .bounce-dot.front { background: radial-gradient(circle, #44ff88, rgba(68,255,136,0.1)); box-shadow: 0 0 20px rgba(68,255,136,0.4); width: 10px; height: 10px; border: 2px solid rgba(68,255,136,0.3); }
-        .bounce-dot.rear { background: radial-gradient(circle, #4488ff, rgba(68,136,255,0.1)); box-shadow: 0 0 15px rgba(68,136,255,0.3); width: 8px; height: 8px; border: 2px solid rgba(68,136,255,0.3); }
-        .bounce-dot.mid { background: radial-gradient(circle, #FFD700, rgba(255,215,0,0.05)); box-shadow: 0 0 10px rgba(255,215,0,0.2); width: 6px; height: 6px; border: 1px solid rgba(255,215,0,0.15); }
-        @keyframes bouncePulse { 0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.4; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.4; } }
-
-        .glow-ring {
-            position: absolute; top: 50%; left: 50%;
+        .roulette-table .cell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 2px;
+            border-radius: 3px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+            min-height: 32px;
+            border: 1px solid rgba(255,215,0,0.04);
+        }
+        .roulette-table .cell:hover { transform: scale(1.05); border-color: var(--gold); z-index: 2; }
+        .roulette-table .cell.red { background: #8b0000; color: #fff; border-color: #8b0000; }
+        .roulette-table .cell.black { background: #1a472a; color: #fff; border-color: #1a472a; }
+        .roulette-table .cell.gold { background: var(--gold); color: #1a1a2e; border-color: var(--gold); }
+        .roulette-table .cell.predicted {
+            border-color: #44ff88;
+            box-shadow: 0 0 20px rgba(68,255,136,0.2);
+        }
+        .roulette-table .cell.top1 {
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(255,215,0,0.4);
+            transform: scale(1.06);
+        }
+        .roulette-table .cell .mote {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 15px rgba(255,215,0,0.4);
+            animation: motePulse 1.2s ease-in-out infinite;
+            border: 2px solid #fff;
+        }
+        .roulette-table .cell .mote.green { background: #44ff88; box-shadow: 0 0 15px rgba(68,255,136,0.3); }
+        .roulette-table .cell .mote.blue { background: #4488ff; box-shadow: 0 0 15px rgba(68,136,255,0.3); }
+        .roulette-table .cell .mote.purple { background: #aa44ff; box-shadow: 0 0 15px rgba(170,68,255,0.3); }
+        @keyframes motePulse {
+            0% { transform: scale(0.8); opacity: 0.6; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.6; }
+        }
+        .roulette-table .cell .ring {
+            position: absolute;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 92%; height: 92%;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            border: 2px solid rgba(255,215,0,0.05);
-            pointer-events: none; z-index: 6;
-            animation: glowRingPulse 3s ease-in-out infinite;
+            border: 2px solid rgba(255,215,0,0.15);
+            animation: ringPulse 1.5s ease-in-out infinite;
+            pointer-events: none;
         }
-        @keyframes glowRingPulse { 0% { border-color: rgba(255,215,0,0.03); transform: translate(-50%, -50%) scale(1); } 50% { border-color: rgba(255,215,0,0.08); transform: translate(-50%, -50%) scale(1.02); } 100% { border-color: rgba(255,215,0,0.03); transform: translate(-50%, -50%) scale(1); } }
+        .roulette-table .cell .ring.green { border-color: rgba(68,255,136,0.3); }
+        @keyframes ringPulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
+        }
+        .roulette-table .label-cell {
+            background: rgba(0,0,0,0.2);
+            color: #aaa;
+            font-size: 7px;
+            font-weight: 600;
+            text-align: center;
+            border: none;
+            cursor: default;
+            min-height: 24px;
+            letter-spacing: 0.5px;
+        }
+        .roulette-table .label-cell:hover { transform: none; border-color: transparent; }
+        .roulette-table .col-label {
+            background: rgba(0,0,0,0.15);
+            color: #666;
+            font-size: 6px;
+            font-weight: 700;
+            text-align: center;
+            border: none;
+            cursor: default;
+            min-height: 20px;
+            letter-spacing: 0.5px;
+        }
+        .roulette-table .col-label:hover { transform: none; border-color: transparent; }
+        .roulette-table .bet-label {
+            background: rgba(255,215,0,0.04);
+            color: #FFD700;
+            font-size: 6px;
+            font-weight: 700;
+            text-align: center;
+            border: 1px solid rgba(255,215,0,0.04);
+            cursor: default;
+            min-height: 20px;
+            letter-spacing: 0.5px;
+        }
+        .roulette-table .bet-label:hover { transform: none; }
+
+        /* ZERO CELL */
+        .roulette-table .zero-cell {
+            grid-row: span 3;
+            background: var(--gold);
+            color: #1a1a2e;
+            font-size: 14px;
+            font-weight: 900;
+            border-color: var(--gold);
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
 
         .num-badge {
             display: inline-flex; align-items: center; justify-content: center;
-            width: 32px; height: 32px; border-radius: 50%;
-            font-weight: 900; font-size: 11px;
-            border: 2px solid rgba(255,215,0,0.08);
+            width: 28px; height: 28px; border-radius: 50%;
+            font-weight: 900; font-size: 9px;
+            border: 2px solid rgba(255,215,0,0.06);
             font-family: 'Orbitron', sans-serif;
-            margin: 2px;
+            margin: 1px;
             cursor: pointer;
             transition: all 0.2s;
             text-shadow: 0 0 8px rgba(0,0,0,0.5);
@@ -170,16 +261,12 @@
         .num-badge.red { background: #8b0000; color: #fff; border-color: #8b0000; }
         .num-badge.black { background: #1a472a; color: #fff; border-color: #1a472a; }
         .num-badge.gold { background: var(--gold); color: #1a1a2e; border-color: var(--gold); }
-        .num-badge.seed { border-color: #00ccff; box-shadow: 0 0 15px rgba(0,204,255,0.15); }
-        .num-badge.predicted { border-color: #44ff88; box-shadow: 0 0 15px rgba(68,255,136,0.15); }
-        .num-badge.top1 { border-color: var(--gold); box-shadow: 0 0 30px rgba(255,215,0,0.4); transform: scale(1.12); }
-        .num-badge.series { border-color: rgba(0,204,255,0.2); }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #1a1a2e; font-weight: 900; padding: 6px 14px;
+            color: #1a1a2e; font-weight: 900; padding: 5px 12px;
             border-radius: 50px; border: none;
-            font-family: 'Orbitron', sans-serif; font-size: 8px;
+            font-family: 'Orbitron', sans-serif; font-size: 7px;
             cursor: pointer; transition: all 0.3s;
             text-transform: uppercase; letter-spacing: 0.5px;
         }
@@ -188,25 +275,25 @@
             background: rgba(255,255,255,0.04); color: #999;
             padding: 4px 10px; border-radius: 50px;
             border: 1px solid rgba(255,255,255,0.04);
-            font-family: 'Orbitron', sans-serif; font-size: 7px;
+            font-family: 'Orbitron', sans-serif; font-size: 6px;
             cursor: pointer; transition: all 0.3s;
         }
         .btn-secondary:hover { background: rgba(255,255,255,0.08); color: #fff; }
 
         .stat-card {
             background: rgba(0,0,0,0.25);
-            border-radius: 6px;
-            padding: 4px 6px;
+            border-radius: 4px;
+            padding: 3px 5px;
             border: 1px solid rgba(255,215,0,0.04);
             text-align: center;
         }
-        .stat-card .number { font-size: 14px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
-        .stat-card .label { font-size: 5px; color: #888; letter-spacing: 0.5px; }
+        .stat-card .number { font-size: 12px; font-weight: 900; font-family: 'Orbitron', sans-serif; }
+        .stat-card .label { font-size: 4px; color: #888; letter-spacing: 0.5px; }
 
         .toast {
             position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
             background: rgba(0,0,0,0.85); color: var(--gold);
-            padding: 8px 16px; border-radius: 50px; font-size: 8px;
+            padding: 6px 14px; border-radius: 50px; font-size: 7px;
             font-weight: 600; border: 1px solid rgba(255,215,0,0.06);
             z-index: 999; transition: all 0.4s; backdrop-filter: blur(12px);
             font-family: 'Orbitron', sans-serif;
@@ -218,112 +305,104 @@
         .seed-box {
             background: rgba(0,0,0,0.3);
             border: 1.5px dashed rgba(0,204,255,0.08);
-            border-radius: 6px;
-            padding: 4px 8px;
-            min-height: 28px;
+            border-radius: 4px;
+            padding: 3px 6px;
+            min-height: 24px;
         }
-        .seed-box .label { font-size: 5px; color: #00ccff; letter-spacing: 0.5px; }
-        .seed-box .count { font-size: 5px; color: #44ff88; }
+        .seed-box .label { font-size: 4px; color: #00ccff; letter-spacing: 0.5px; }
+        .seed-box .count { font-size: 4px; color: #44ff88; }
 
         .direction-indicator {
-            display: inline-block; padding: 2px 10px; border-radius: 20px;
-            font-size: 7px; font-weight: 700; font-family: 'Orbitron', sans-serif;
+            display: inline-block; padding: 1px 8px; border-radius: 20px;
+            font-size: 6px; font-weight: 700; font-family: 'Orbitron', sans-serif;
         }
         .direction-indicator.left { background: rgba(255,215,0,0.12); color: var(--gold); }
         .direction-indicator.right { background: rgba(0,204,255,0.12); color: #00ccff; }
         .direction-indicator.stable { background: rgba(68,255,136,0.08); color: #44ff88; }
 
-        .prediction-item {
-            display: flex; align-items: center;
-            padding: 4px 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            gap: 6px;
-            background: rgba(0,0,0,0.15);
-            border-radius: 4px;
-            margin-bottom: 2px;
-            transition: all 0.3s;
-        }
-        .prediction-item:hover { background: rgba(255,215,0,0.04); }
-        .prediction-item .rank { font-size: 8px; color: #666; font-weight: 700; min-width: 22px; }
-        .prediction-item .rank.gold { color: var(--gold); }
-        .prediction-item .rank.silver { color: #aaa; }
-        .prediction-item .rank.bronze { color: #CD7F32; }
-        .prediction-item .num { font-size: 14px; font-weight: 900; font-family: 'Orbitron', sans-serif; min-width: 32px; text-align: center; }
-        .prediction-item .prob { font-size: 9px; color: #44ff88; min-width: 38px; text-align: right; font-weight: 700; }
-        .prediction-item .conf-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.06); flex: 1; overflow: hidden; }
-        .prediction-item .conf-bar .fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
-        .prediction-item .source { font-size: 5px; color: #666; min-width: 35px; text-align: right; }
-
-        .input-num { width: 36px; height: 36px; text-align: center; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(255,215,0,0.08); border-radius: 6px; font-size: 13px; font-weight: 700; color: var(--gold); outline: none; font-family: 'Orbitron', sans-serif; }
+        .input-num { width: 32px; height: 32px; text-align: center; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(255,215,0,0.08); border-radius: 4px; font-size: 12px; font-weight: 700; color: var(--gold); outline: none; font-family: 'Orbitron', sans-serif; }
         .input-num:focus { border-color: var(--gold); }
 
-        .bounce-card { background: rgba(68,255,136,0.04); border: 1px solid rgba(68,255,136,0.06); border-radius: 6px; padding: 4px 8px; }
-        .bounce-card .label { font-size: 6px; color: #44ff88; letter-spacing: 0.5px; }
+        .bounce-card { background: rgba(68,255,136,0.04); border: 1px solid rgba(68,255,136,0.06); border-radius: 4px; padding: 3px 6px; }
+        .bounce-card .label { font-size: 5px; color: #44ff88; letter-spacing: 0.5px; }
 
         .bet-suggestion {
             background: rgba(255,215,0,0.05);
             border: 1px solid rgba(255,215,0,0.08);
-            border-radius: 6px;
-            padding: 4px 8px;
+            border-radius: 4px;
+            padding: 3px 6px;
             margin-top: 2px;
         }
-        .bet-suggestion .label { font-size: 5px; color: var(--gold); letter-spacing: 0.5px; }
-        .bet-suggestion .item { font-size: 6px; color: #ddd; display: flex; justify-content: space-between; padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .bet-suggestion .label { font-size: 4px; color: var(--gold); letter-spacing: 0.5px; }
+        .bet-suggestion .item { font-size: 5px; color: #ddd; display: flex; justify-content: space-between; padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
         .bet-suggestion .item .conf { color: #44ff88; }
 
         .ai-thinking { animation: thinkPulse 1.5s ease-in-out infinite; }
         @keyframes thinkPulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
 
-        .history-dot { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; font-weight: 700; font-size: 6px; margin: 0 1px; border: 1px solid rgba(255,215,0,0.04); font-family: 'Orbitron', sans-serif; }
+        .history-dot { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; font-weight: 700; font-size: 5px; margin: 0 1px; border: 1px solid rgba(255,215,0,0.04); font-family: 'Orbitron', sans-serif; }
         .history-dot.red { background: #8b0000; color: #fff; }
         .history-dot.black { background: #1a472a; color: #fff; }
         .history-dot.gold { background: var(--gold); color: #1a1a2e; }
 
-        .series-container {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            max-height: 200px;
-            overflow: hidden;
-            padding: 2px 0;
-        }
-
-        .calc-progress { height: 3px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+        .calc-progress { height: 2px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
         .calc-progress .fill { height: 100%; background: linear-gradient(90deg, var(--gold), #44ff88); transition: width 0.3s; }
 
         .ai-suggestion-box {
             background: rgba(255,215,0,0.03);
             border: 1px solid rgba(255,215,0,0.06);
-            border-radius: 6px;
-            padding: 4px 8px;
+            border-radius: 4px;
+            padding: 3px 6px;
             margin-top: 2px;
         }
-        .ai-suggestion-box .title { font-size: 5px; color: var(--gold); letter-spacing: 0.5px; }
-        .ai-suggestion-box .content { font-size: 6px; color: #ccc; padding: 2px 0; }
+        .ai-suggestion-box .title { font-size: 4px; color: var(--gold); letter-spacing: 0.5px; }
+        .ai-suggestion-box .content { font-size: 5px; color: #ccc; padding: 1px 0; }
         .ai-suggestion-box .content .highlight { color: #44ff88; }
 
+        .ai-number-list {
+            max-height: 60px;
+            overflow-y: auto;
+            font-size: 5px;
+            color: #aaa;
+            padding: 2px 4px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 2px;
+        }
+        .ai-number-list .num-item {
+            display: inline-block;
+            padding: 1px 3px;
+            margin: 1px;
+            border-radius: 3px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 6px;
+        }
+        .ai-number-list .num-item.high { background: rgba(68,255,136,0.15); color: #44ff88; }
+        .ai-number-list .num-item.medium { background: rgba(255,215,0,0.1); color: var(--gold); }
+        .ai-number-list .num-item.low { background: rgba(255,68,68,0.1); color: #ff4444; }
+
         @media (max-width: 640px) {
-            .grid { gap: 4px; }
-            .glass { padding: 8px; }
-            .wheel-wrapper { max-width: 260px; }
-            .wheel-center { width: 34px; height: 34px; font-size: 8px; }
-            .num-badge { width: 26px; height: 26px; font-size: 9px; }
-            .stat-card .number { font-size: 12px; }
-            .input-num { width: 32px; height: 32px; font-size: 11px; }
-            .btn-primary { padding: 4px 10px; font-size: 7px; }
-            .toast { font-size: 7px; padding: 6px 12px; }
-            .series-container { max-height: 160px; }
-            .prediction-item .num { font-size: 12px; min-width: 28px; }
-            .prediction-item .prob { font-size: 8px; min-width: 32px; }
-            .prediction-item .rank { font-size: 7px; min-width: 18px; }
+            .grid { gap: 3px; }
+            .glass { padding: 6px; }
+            .wheel-wrapper { max-width: 220px; }
+            .wheel-center { width: 30px; height: 30px; font-size: 7px; }
+            .roulette-table .cell { font-size: 7px; min-height: 24px; padding: 2px; }
+            .roulette-table { min-width: 200px; grid-template-columns: 28px repeat(12, 1fr); }
+            .roulette-table .zero-cell { min-height: 76px; font-size: 10px; }
+            .roulette-table .cell .mote { width: 8px; height: 8px; top: -2px; right: -2px; }
+            .stat-card .number { font-size: 10px; }
+            .input-num { width: 28px; height: 28px; font-size: 10px; }
+            .btn-primary { padding: 4px 10px; font-size: 6px; }
+            .toast { font-size: 6px; padding: 4px 10px; }
+            .num-badge { width: 22px; height: 22px; font-size: 7px; }
         }
         @media (max-width: 400px) {
-            .wheel-wrapper { max-width: 200px; }
+            .wheel-wrapper { max-width: 180px; }
             .grid-cols-4 { grid-template-columns: 1fr 1fr; }
-            .series-container { max-height: 130px; }
-            .prediction-item .num { font-size: 10px; min-width: 24px; }
-            .prediction-item .prob { font-size: 7px; min-width: 28px; }
-            .num-badge { width: 22px; height: 22px; font-size: 8px; }
+            .roulette-table .cell { font-size: 6px; min-height: 20px; }
+            .roulette-table { min-width: 160px; grid-template-columns: 22px repeat(12, 1fr); gap: 1px; padding: 2px; }
+            .roulette-table .zero-cell { min-height: 62px; font-size: 8px; }
         }
     </style>
 </head>
@@ -334,17 +413,17 @@
     <div class="text-center mb-2">
         <h1 class="text-lg md:text-2xl font-black gold-text orbitron tracking-wider">
             🧠 ROULETTE <span class="text-white">MASTER AI</span>
-            <span class="text-[6px] block text-yellow-500/30 font-normal tracking-widest">ULTIMATE EDITION • 300 STRATEGIES • 8000+ CALCULATIONS • SELF-LEARNING</span>
+            <span class="text-[5px] block text-yellow-500/30 font-normal tracking-widest">ULTIMATE EDITION • 300 STRATEGIES • 8000+ CALCULATIONS</span>
         </h1>
-        <div class="flex justify-center gap-4 mt-1">
-            <span class="text-[5px] text-gray-500">⚡ AI Power: <span id="aiPower" class="text-green-400">100%</span></span>
-            <span class="text-[5px] text-gray-500">🧠 Memory: <span id="aiMemory" class="text-yellow-400">0</span></span>
-            <span class="text-[5px] text-gray-500">🎯 Accuracy: <span id="aiAccuracy" class="text-blue-400">0%</span></span>
+        <div class="flex justify-center gap-3 mt-1">
+            <span class="text-[4px] text-gray-500">⚡ AI Power: <span id="aiPower" class="text-green-400">100%</span></span>
+            <span class="text-[4px] text-gray-500">🧠 Memory: <span id="aiMemory" class="text-yellow-400">0</span></span>
+            <span class="text-[4px] text-gray-500">🎯 Accuracy: <span id="aiAccuracy" class="text-blue-400">0%</span></span>
         </div>
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-        <!-- LEFT: WHEEL + CONTROLS -->
+        <!-- LEFT: WHEEL -->
         <div class="col-span-2 md:col-span-1 glass rounded-xl p-2">
             <div class="wheel-wrapper">
                 <div class="wheel-pointer"></div>
@@ -360,19 +439,19 @@
             <div class="mt-2 flex gap-1 justify-center flex-wrap">
                 <input type="number" id="liveInput" min="0" max="36" placeholder="N" 
                        class="input-num" onkeydown="if(event.key==='Enter') addLiveNumber()">
-                <button class="btn-primary text-[7px] px-2 py-1" onclick="addLiveNumber()">➕ ONGEZA</button>
-                <button class="btn-secondary text-[6px] px-2 py-1" onclick="quickFillFull()">📊 FULL</button>
+                <button class="btn-primary text-[6px] px-2 py-1" onclick="addLiveNumber()">➕</button>
+                <button class="btn-secondary text-[5px] px-2 py-1" onclick="quickFillFull()">📊</button>
             </div>
 
             <div class="mt-1 flex justify-between items-center bg-black/20 rounded-lg px-2 py-1 flex-wrap gap-1">
-                <span class="text-[5px] text-gray-500">🔄</span>
-                <span id="directionDisplay" class="direction-indicator stable text-[6px]">⚖️ STABLE</span>
-                <span class="text-[5px] text-gray-500">⚡ <span id="speedDisplay" class="text-[7px] text-blue-400">0s</span></span>
-                <span id="aiStatus" class="text-[6px] text-yellow-500 ai-thinking">● LEARNING</span>
+                <span class="text-[4px] text-gray-500">🔄</span>
+                <span id="directionDisplay" class="direction-indicator stable text-[5px]">⚖️ STABLE</span>
+                <span class="text-[4px] text-gray-500">⚡ <span id="speedDisplay" class="text-[6px] text-blue-400">0s</span></span>
+                <span id="aiStatus" class="text-[5px] text-yellow-500 ai-thinking">● LEARNING</span>
             </div>
 
             <div class="mt-1">
-                <div class="flex justify-between text-[5px] text-gray-500">
+                <div class="flex justify-between text-[4px] text-gray-500">
                     <span>📊 STRATEGIES</span>
                     <span id="strategyCount" class="text-green-400">0/300</span>
                 </div>
@@ -382,31 +461,38 @@
             <div class="mt-1 seed-box">
                 <div class="label flex justify-between">
                     <span>🧬 SEED</span>
-                    <span class="count" id="seedCount">0 / 12+</span>
+                    <span class="count" id="seedCount">0/12+</span>
                 </div>
-                <div id="seedContainer" class="flex flex-wrap gap-0.5 mt-0.5 min-h-[22px]">
-                    <span class="text-gray-600 text-[5px]">-</span>
+                <div id="seedContainer" class="flex flex-wrap gap-0.5 mt-0.5 min-h-[20px]">
+                    <span class="text-gray-600 text-[4px]">-</span>
                 </div>
-                <div class="text-[4px] text-gray-500 mt-0.5 text-center" id="seedMessage">Jaza angalau namba 12</div>
+                <div class="text-[3px] text-gray-500 mt-0.5 text-center" id="seedMessage">Jaza angalau namba 12</div>
             </div>
 
             <div class="mt-1 flex flex-wrap gap-0.5 justify-center">
-                <span class="text-[4px] text-gray-600">MIFANO:</span>
-                <button onclick="quickFill([25,5,5,21,22,7,2,24,21,36,23,32,18,27,15,22])" class="text-[5px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S1</button>
-                <button onclick="quickFill([23,19,13,8,29,33,26,25,33,14,34,16,11,24,4,1])" class="text-[5px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S2</button>
-                <button onclick="clearAll()" class="text-[5px] bg-red-500/10 px-1.5 py-0.5 rounded hover:bg-red-500/20">✖ FUTA</button>
+                <span class="text-[3px] text-gray-600">MIFANO:</span>
+                <button onclick="quickFill([25,5,5,21,22,7,2,24,21,36,23,32,18,27,15,22])" class="text-[4px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S1</button>
+                <button onclick="quickFill([23,19,13,8,29,33,26,25,33,14,34,16,11,24,4,1])" class="text-[4px] bg-white/5 px-1.5 py-0.5 rounded hover:bg-white/10">S2</button>
+                <button onclick="clearAll()" class="text-[4px] bg-red-500/10 px-1.5 py-0.5 rounded hover:bg-red-500/20">✖</button>
             </div>
         </div>
 
-        <!-- MIDDLE LEFT: TOP PREDICTIONS -->
+        <!-- MIDDLE LEFT: TOP PREDICTIONS - ROULETTE TABLE -->
         <div class="col-span-2 md:col-span-1 glass rounded-xl p-2">
-            <p class="text-[7px] text-yellow-400/80 tracking-widest text-center">🏆 TOP PREDICTIONS</p>
-            <div id="topPredictions" class="series-container">
-                <span class="text-gray-600 text-[6px] text-center">-</span>
+            <p class="text-[6px] text-yellow-400/80 tracking-widest text-center">🏆 TOP PREDICTIONS</p>
+            <div id="topPredictionsTable" class="roulette-table overflow-x-auto">
+                <span class="text-gray-600 text-[5px] text-center col-span-full">-</span>
             </div>
 
             <div class="mt-1 ai-suggestion-box">
-                <div class="title">🧠 AI SUGGESTIONS</div>
+                <div class="title">🧠 AI NUMBER PREDICTIONS</div>
+                <div id="aiNumberList" class="ai-number-list">
+                    <span class="text-gray-600">-</span>
+                </div>
+            </div>
+
+            <div class="mt-1 ai-suggestion-box">
+                <div class="title">💡 AI SUGGESTIONS</div>
                 <div id="aiSuggestions" class="content">
                     <span class="text-gray-600">-</span>
                 </div>
@@ -415,21 +501,21 @@
 
         <!-- MIDDLE RIGHT: BOUNCE + BET -->
         <div class="col-span-2 md:col-span-1 glass rounded-xl p-2">
-            <p class="text-[6px] text-green-400/60 tracking-widest text-center">🎯 BOUNCE (20)</p>
-            <div id="bouncePredictions" class="flex flex-wrap gap-0.5 justify-center min-h-[40px]">
-                <span class="text-gray-600 text-[5px]">-</span>
+            <p class="text-[5px] text-green-400/60 tracking-widest text-center">🎯 BOUNCE (20)</p>
+            <div id="bouncePredictions" class="flex flex-wrap gap-0.5 justify-center min-h-[32px]">
+                <span class="text-gray-600 text-[4px]">-</span>
             </div>
 
             <div class="mt-1 bounce-card">
                 <div class="label text-center">📊 BOUNCE PHYSICS</div>
-                <div id="bouncePhysics" class="text-[6px] text-gray-300 mt-0.5 text-center">
+                <div id="bouncePhysics" class="text-[5px] text-gray-300 mt-0.5 text-center">
                     <span class="text-gray-600">-</span>
                 </div>
             </div>
 
             <div class="mt-1 bet-suggestion">
                 <div class="label text-center">💡 BET SUGGESTIONS</div>
-                <div id="betSuggestions" class="text-[6px] text-gray-300">
+                <div id="betSuggestions" class="text-[5px] text-gray-300">
                     <span class="text-gray-600">-</span>
                 </div>
             </div>
@@ -444,23 +530,23 @@
             </div>
 
             <div class="mt-1">
-                <p class="text-[5px] text-gray-500 tracking-widest">📋 HISTORY</p>
-                <div id="historyDisplay" class="flex flex-wrap gap-0.5 max-h-16 overflow-y-auto scrollbar-thin mt-0.5">
-                    <span class="text-gray-600 text-[5px]">-</span>
+                <p class="text-[4px] text-gray-500 tracking-widest">📋 HISTORY</p>
+                <div id="historyDisplay" class="flex flex-wrap gap-0.5 max-h-14 overflow-y-auto scrollbar-thin mt-0.5">
+                    <span class="text-gray-600 text-[4px]">-</span>
                 </div>
             </div>
 
             <div class="mt-1">
-                <p class="text-[5px] text-gray-500 tracking-widest">📈 HEATMAP</p>
+                <p class="text-[4px] text-gray-500 tracking-widest">📈 HEATMAP</p>
                 <div id="heatmapDisplay" class="flex flex-wrap gap-0.5 mt-0.5">
-                    <span class="text-gray-600 text-[5px]">-</span>
+                    <span class="text-gray-600 text-[4px]">-</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="text-center mt-2 text-[5px] text-gray-700 tracking-widest border-t border-white/5 pt-1">
-        🧠 ROULETTE MASTER AI • 300 STRATEGIES • 8000+ CALCULATIONS • SELF-LEARNING • REAL WHEEL
+    <div class="text-center mt-2 text-[4px] text-gray-700 tracking-widest border-t border-white/5 pt-1">
+        🧠 ROULETTE MASTER AI • 300 STRATEGIES • 8000+ CALCULATIONS • SELF-LEARNING
     </div>
 </div>
 
@@ -484,11 +570,9 @@
     };
 
     // ============================================================
-    // 300 STRATEGIES - Complete List
+    // 300 STRATEGIES
     // ============================================================
     const STRATEGIES = [];
-
-    // A. Betting Progression Systems (1-50)
     const progressionSystems = [
         'Martingale', 'Grand Martingale', 'Anti-Martingale', "D'Alembert", 'Reverse D\'Alembert',
         'Fibonacci', 'Reverse Fibonacci', 'Labouchere', 'Reverse Labouchere', 'Paroli',
@@ -505,7 +589,6 @@
         STRATEGIES.push({ id: i + 1, name, category: 'A. Progression', type: 'progression' });
     });
 
-    // B. Pattern & Trend Systems (51-100)
     const patternSystems = [
         'Hot Numbers', 'Cold Numbers', 'Due Numbers', 'Law of the Third', 'Frequency Analysis',
         'Gap Analysis', 'Trend Following', 'Trend Reversal', 'Pivot System', 'Visual Ballistics',
@@ -522,7 +605,6 @@
         STRATEGIES.push({ id: 51 + i, name, category: 'B. Pattern', type: 'pattern' });
     });
 
-    // C. Physical & Wheel Bias Systems (101-150)
     const physicalSystems = [
         'Dealer Rhythm', 'Dealer Signature Method', 'Wheel Bias Analysis', 'Visual Tracking', 'Ball Speed Analysis',
         'Wheel Speed Analysis', 'Deceleration Pattern', 'Launch Angle', 'Ball Drop Zone', 'Pocket Bias',
@@ -539,7 +621,6 @@
         STRATEGIES.push({ id: 101 + i, name, category: 'C. Physical', type: 'physical' });
     });
 
-    // D. Combination Systems (151-200)
     const combinationSystems = [
         'Martingale + Hot Numbers', 'Martingale + Cold Numbers', 'Martingale + Trend Following', 'Martingale + Visual Ballistics',
         'Grand Martingale + Dealer Sig', 'Fibonacci + Hot Numbers', 'Fibonacci + Trend Following', "D'Alembert + Cold Numbers",
@@ -559,7 +640,6 @@
         STRATEGIES.push({ id: 151 + i, name, category: 'D. Combination', type: 'combination' });
     });
 
-    // E. Specialized Mathematical Formulas (201-250)
     const mathSystems = [
         'Expected Value', 'House Edge', 'Probability Single', 'Probability Red/Black', 'Probability Dozen',
         'Probability Column', 'Probability Six Line', 'Probability Corner', 'Probability Split', 'Probability Street',
@@ -576,7 +656,6 @@
         STRATEGIES.push({ id: 201 + i, name, category: 'E. Mathematical', type: 'math' });
     });
 
-    // F. Additional Mathematical Strategies (251-300)
     const additionalSystems = [
         'Fixed Betting', 'Variable Betting', 'Progressive Betting', 'Conservative Betting', 'Aggressive Betting',
         'Risk-Weighted Betting', 'Time-Based Betting', 'Session-Based Betting', 'Hedge Betting', 'Positive Expectation',
@@ -608,7 +687,6 @@
     let signalIndicators = [];
     let betSuggestions = [];
     let totalCalculations = 0;
-    let strategyResults = [];
     let aiMemory = 0;
     let totalCorrect = 0;
     let totalAttempts = 0;
@@ -629,9 +707,10 @@
     const heatmapDisplay = document.getElementById('heatmapDisplay');
     const bouncePredictionsEl = document.getElementById('bouncePredictions');
     const bouncePhysicsEl = document.getElementById('bouncePhysics');
-    const topPredictionsEl = document.getElementById('topPredictions');
+    const topPredictionsTable = document.getElementById('topPredictionsTable');
     const betSuggestionsEl = document.getElementById('betSuggestions');
     const aiSuggestionsEl = document.getElementById('aiSuggestions');
+    const aiNumberList = document.getElementById('aiNumberList');
     const seedContainer = document.getElementById('seedContainer');
     const seedCount = document.getElementById('seedCount');
     const seedMessage = document.getElementById('seedMessage');
@@ -658,7 +737,7 @@
         existing.forEach(el => el.remove());
 
         const isMobile = size < 300;
-        const baseFontSize = isMobile ? 8 : 10;
+        const baseFontSize = isMobile ? 7 : 9;
 
         REAL_ROULETTE.forEach((num, idx) => {
             const angle = (idx * 9.730) - 90;
@@ -687,7 +766,6 @@
     // ============================================================
     function determineAISpeed() {
         if (historyData.length < 3) return 3;
-        
         const recent = historyData.slice(-10);
         const gaps = [];
         for (let i = 1; i < recent.length; i++) {
@@ -697,19 +775,16 @@
             gaps.push(Math.abs(gap));
         }
         const avgGap = gaps.reduce((a,b) => a + b, 0) / gaps.length;
-        
         let speed = 3;
         if (avgGap < 3) speed = 2;
         else if (avgGap < 6) speed = 3;
         else if (avgGap < 10) speed = 4;
         else speed = 5;
-        
         const lastNum = historyData[historyData.length - 1];
         const freq = {};
         historyData.forEach(n => freq[n] = (freq[n] || 0) + 1);
         const hotThreshold = historyData.length / 37;
         if (freq[lastNum] > hotThreshold * 1.5) speed = Math.min(5, speed + 1);
-        
         return speed;
     }
 
@@ -788,7 +863,7 @@
             
             predictedNumbers.forEach(num => {
                 if (num >= 0 && num <= 36) {
-                    results.push({ number: num, confidence: confidence, strategy: strategy.name, category: strategy.category, id: strategy.id });
+                    results.push({ number: num, confidence: confidence, strategy: strategy.name });
                 }
             });
         });
@@ -796,15 +871,15 @@
         const aggregated = {};
         results.forEach(r => {
             if (!aggregated[r.number]) {
-                aggregated[r.number] = { number: r.number, confidence: 0, strategies: [] };
+                aggregated[r.number] = { number: r.number, confidence: 0, count: 0 };
             }
             aggregated[r.number].confidence += r.confidence;
-            aggregated[r.number].strategies.push(r.strategy);
+            aggregated[r.number].count++;
         });
         
         const finalResults = Object.values(aggregated).map(item => {
-            const avgConf = Math.min(95, Math.round(item.confidence / item.strategies.length));
-            return { number: item.number, confidence: avgConf, strategies: item.strategies.slice(0, 3), count: item.strategies.length };
+            const avgConf = Math.min(95, Math.round(item.confidence / item.count));
+            return { number: item.number, confidence: avgConf, count: item.count };
         });
         
         finalResults.sort((a, b) => b.confidence - a.confidence);
@@ -855,9 +930,7 @@
                         number: num,
                         confidence: Math.min(98, confidence),
                         bounceIndex: bounceIndex,
-                        angle: baseAngle + totalOffset,
-                        trajectory: trajectory,
-                        factor: factor
+                        angle: baseAngle + totalOffset
                     });
                 }
             }
@@ -892,7 +965,7 @@
         history.forEach(n => freq[n] = (freq[n] || 0) + 1);
         
         strategyResults.forEach(r => {
-            predictions.push({ number: r.number, confidence: r.confidence, source: r.strategies ? r.strategies[0] : 'STRATEGY' });
+            predictions.push({ number: r.number, confidence: r.confidence, source: 'STRATEGY' });
         });
         
         const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
@@ -938,7 +1011,6 @@
             }
         });
         
-        // Update AI stats
         aiMemory = history.length;
         aiMemoryEl.textContent = aiMemory;
         const accuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
@@ -946,6 +1018,91 @@
         aiPower.textContent = Math.min(100, 50 + Math.round((history.length / 50) * 50)) + '%';
         
         return Object.values(unique).sort((a, b) => b.confidence - a.confidence).slice(0, 15);
+    }
+
+    // ============================================================
+    // GENERATE AI NUMBER LIST
+    // ============================================================
+    function generateAINumberList(predictions) {
+        if (predictions.length === 0) return ['-'];
+        return predictions.slice(0, 10).map((p, i) => {
+            const color = p.number === 0 ? 'gold' : COLORS[p.number];
+            const level = p.confidence > 70 ? 'high' : p.confidence > 50 ? 'medium' : 'low';
+            return `<span class="num-item ${level}" style="background:${color === 'gold' ? 'rgba(255,215,0,0.15)' : color === 'red' ? 'rgba(139,0,0,0.3)' : 'rgba(26,71,42,0.3)'};">#${i+1} ${p.number} (${Math.round(p.confidence)}%)</span>`;
+        }).join('');
+    }
+
+    // ============================================================
+    // DISPLAY TOP PREDICTIONS - CORRECT ROULETTE TABLE
+    // ============================================================
+    function displayTopPredictionsTable(preds) {
+        if (preds.length === 0) {
+            topPredictionsTable.innerHTML = '<span class="text-gray-600 text-[5px] text-center col-span-full">-</span>';
+            return;
+        }
+
+        const top10 = preds.slice(0, 10);
+        const topNumbers = top10.map(p => p.number);
+        const topConfidence = top10.map(p => p.confidence);
+
+        let html = '';
+        
+        // Create 3 rows of numbers
+        const rows = [
+            [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
+            [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35],
+            [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]
+        ];
+
+        // Row for zero (spans 3 rows)
+        html += `<div class="zero-cell">0</div>`;
+
+        // Add each row
+        rows.forEach((row, rowIndex) => {
+            row.forEach(num => {
+                const color = num === 0 ? 'gold' : COLORS[num];
+                const isPredicted = topNumbers.includes(num);
+                const rank = topNumbers.indexOf(num) + 1;
+                const isTop1 = rank === 1;
+                const conf = isPredicted ? Math.round(topConfidence[rank - 1]) : 0;
+                const moteColor = rank <= 3 ? 'green' : rank <= 6 ? 'blue' : 'purple';
+                
+                html += `<div class="cell ${color} ${isPredicted ? 'predicted' : ''} ${isTop1 ? 'top1' : ''}" 
+                              style="${isPredicted ? `border-color: ${rank <= 3 ? '#44ff88' : rank <= 6 ? '#4488ff' : '#aa44ff'};` : ''}">
+                    ${num}
+                    ${isPredicted ? `<span class="mote ${moteColor}"></span>` : ''}
+                    ${isPredicted ? `<span class="ring ${moteColor}"></span>` : ''}
+                    ${isPredicted ? `<span style="position:absolute;bottom:-2px;font-size:4px;color:#44ff88;">${conf}%</span>` : ''}
+                    ${isTop1 ? `<span style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);font-size:5px;color:var(--gold);">👑</span>` : ''}
+                </div>`;
+            });
+        });
+
+        // Add column labels (2nd 12, 3rd 12, etc.)
+        // Add bet options row
+        const betOptions = [
+            { label: '1st 12', span: 4 },
+            { label: '2nd 12', span: 4 },
+            { label: '3rd 12', span: 4 }
+        ];
+        
+        // Add a spacer for zero column
+        html += `<div class="col-label" style="grid-column:1;">&nbsp;</div>`;
+        
+        // Add column labels
+        html += `<div class="label-cell" style="grid-column:2/6;">1st 12</div>`;
+        html += `<div class="label-cell" style="grid-column:6/10;">2nd 12</div>`;
+        html += `<div class="label-cell" style="grid-column:10/14;">3rd 12</div>`;
+
+        // Add second row of bet options
+        html += `<div class="col-label" style="grid-column:1;">&nbsp;</div>`;
+        html += `<div class="bet-label" style="grid-column:2/5;">1-18</div>`;
+        html += `<div class="bet-label" style="grid-column:5/7;">EVEN</div>`;
+        html += `<div class="bet-label" style="grid-column:7/9;">ODD</div>`;
+        html += `<div class="bet-label" style="grid-column:9/12;">19-36</div>`;
+        html += `<div class="bet-label" style="grid-column:12/14;">RED/BLK</div>`;
+
+        topPredictionsTable.innerHTML = html;
     }
 
     // ============================================================
@@ -1049,8 +1206,8 @@
     // ============================================================
     function updateSeedDisplay() {
         if (seedData.length === 0) {
-            seedContainer.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
-            seedCount.textContent = '0 / 12+';
+            seedContainer.innerHTML = '<span class="text-gray-600 text-[4px]">-</span>';
+            seedCount.textContent = '0/12+';
             seedMessage.textContent = 'Jaza angalau namba 12';
             seedMessage.style.color = '#666';
             return;
@@ -1060,10 +1217,10 @@
         seedContainer.innerHTML = display.map(n => {
             const color = n === 0 ? 'gold' : COLORS[n];
             const isSeed = seedData.length >= 12;
-            return `<span class="num-badge ${color} ${isSeed ? 'seed' : ''}" style="width:22px;height:22px;font-size:8px;border-color:${isSeed ? 'rgba(0,204,255,0.2)' : 'rgba(255,215,0,0.05)'};">${n}</span>`;
+            return `<span class="num-badge ${color} ${isSeed ? 'seed' : ''}" style="width:20px;height:20px;font-size:7px;border-color:${isSeed ? 'rgba(0,204,255,0.2)' : 'rgba(255,215,0,0.05)'};">${n}</span>`;
         }).join('');
         
-        seedCount.textContent = `${seedData.length} / 12+`;
+        seedCount.textContent = `${seedData.length}/12+`;
         seedMessage.textContent = seedData.length >= 12 ? `✅ Namba ${seedData.length} zimewekwa!` : `⚠️ Ongeza ${12 - seedData.length} zaidi`;
         seedMessage.style.color = seedData.length >= 12 ? '#44ff88' : '#FF8800';
     }
@@ -1093,7 +1250,6 @@
         aiPredictions = generateAIPredictions(historyData, bounceResults.all);
         betSuggestions = generateBetSuggestions(aiPredictions);
         
-        // Check if prediction was correct
         totalAttempts++;
         const topPred = aiPredictions.length > 0 ? aiPredictions[0].number : -1;
         if (topPred === num) totalCorrect++;
@@ -1104,9 +1260,10 @@
         updateHeatmap();
         displayBouncePredictions(bounceResults);
         displayBouncePhysics(bounceResults);
-        displayTopPredictions(aiPredictions);
+        displayTopPredictionsTable(aiPredictions);
         displayBetSuggestions(betSuggestions);
         displayAISuggestions(aiPredictions);
+        displayAINumberList(aiPredictions);
         displaySignalIndicatorsOnWheel(bounceResults);
         displayBounceDots(bounceResults);
         updateSeedDisplay();
@@ -1131,36 +1288,15 @@
     // ============================================================
     // DISPLAY FUNCTIONS
     // ============================================================
-    function displayTopPredictions(preds) {
-        if (preds.length === 0) {
-            topPredictionsEl.innerHTML = '<span class="text-gray-600 text-[6px] text-center">-</span>';
-            return;
-        }
-
-        const top10 = preds.slice(0, 10);
-        topPredictionsEl.innerHTML = top10.map((p, i) => {
-            const color = p.number === 0 ? 'gold' : COLORS[p.number];
-            const rank = i + 1;
-            const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
-            const isTop = rank === 1;
-            const confPercent = Math.round(p.confidence);
-            const barColor = confPercent > 70 ? 'bg-green-400' : confPercent > 50 ? 'bg-yellow-400' : 'bg-red-400';
-            const sourceDisplay = p.source || '-';
-            
-            return `<div class="prediction-item">
-                <span class="rank ${rankClass}">#${rank}</span>
-                <span class="num-badge ${color} ${isTop ? 'top1' : ''} ${rank <= 3 ? 'high' : ''}" style="width:28px;height:28px;font-size:10px;">${p.number}</span>
-                <span class="prob">${confPercent}%</span>
-                <div class="conf-bar"><div class="fill ${barColor}" style="width:${confPercent}%;"></div></div>
-                <span class="source">${sourceDisplay}</span>
-            </div>`;
-        }).join('');
+    function displayAINumberList(preds) {
+        const list = generateAINumberList(preds);
+        aiNumberList.innerHTML = list;
     }
 
     function displayAISuggestions(preds) {
         const suggestions = generateAISuggestions(preds, historyData);
         aiSuggestionsEl.innerHTML = suggestions.map(s => 
-            `<div style="font-size:6px;color:#ddd;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.03);">${s}</div>`
+            `<div style="font-size:5px;color:#ddd;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.03);">${s}</div>`
         ).join('');
     }
 
@@ -1214,13 +1350,13 @@
 
     function displayBouncePredictions(results) {
         if (!results.all || results.all.length === 0) {
-            bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
+            bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[4px]">-</span>';
             return;
         }
         const top20 = results.all.slice(0, 20);
         bouncePredictionsEl.innerHTML = top20.map((r) => {
             const color = r.number === 0 ? 'gold' : COLORS[r.number];
-            return `<span class="num-badge ${color}" style="width:24px;height:24px;font-size:8px;">${r.number}</span>`;
+            return `<span class="num-badge ${color}" style="width:20px;height:20px;font-size:7px;">${r.number}</span>`;
         }).join('');
     }
 
@@ -1231,7 +1367,7 @@
         }
         const top5 = results.all.slice(0, 5).map(r => r.number).join(', ');
         bouncePhysicsEl.innerHTML = `
-            <div class="flex flex-wrap gap-1 text-[6px] justify-center">
+            <div class="flex flex-wrap gap-1 text-[5px] justify-center">
                 <div><span class="text-green-400">TOP:</span> <span class="text-yellow-400">${top5}</span></div>
                 <div><span class="text-gray-500">⚡ ${currentSpeed}s</span></div>
                 <div><span class="text-gray-500">📊 ${results.totalCalculations}+</span></div>
@@ -1257,16 +1393,16 @@
         const seedReady = seedData.length >= 12;
         if (!seedReady) {
             aiStatus.textContent = `⏳ WAITING (${seedData.length}/12)`;
-            aiStatus.className = 'text-[6px] text-orange-400';
+            aiStatus.className = 'text-[5px] text-orange-400';
         } else if (historyData.length < 5) {
             aiStatus.textContent = '🧠 LEARNING...';
-            aiStatus.className = 'text-[6px] text-yellow-500 ai-thinking';
+            aiStatus.className = 'text-[5px] text-yellow-500 ai-thinking';
         } else if (historyData.length < 15) {
             aiStatus.textContent = '🧠 TRAINING...';
-            aiStatus.className = 'text-[6px] text-orange-400 ai-thinking';
+            aiStatus.className = 'text-[5px] text-orange-400 ai-thinking';
         } else {
             aiStatus.textContent = `🧠 ACTIVE (${STRATEGIES.length} strategies)`;
-            aiStatus.className = 'text-[6px] text-green-400';
+            aiStatus.className = 'text-[5px] text-green-400';
         }
     }
 
@@ -1285,12 +1421,12 @@
         historyDisplay.innerHTML = display.map(n => {
             const color = n === 0 ? 'gold' : COLORS[n];
             return `<span class="history-dot ${color}">${n}</span>`;
-        }).join('') || '<span class="text-gray-600 text-[5px]">-</span>';
+        }).join('') || '<span class="text-gray-600 text-[4px]">-</span>';
     }
 
     function updateHeatmap() {
         if (historyData.length === 0) {
-            heatmapDisplay.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
+            heatmapDisplay.innerHTML = '<span class="text-gray-600 text-[4px]">-</span>';
             return;
         }
         const freq = {};
@@ -1301,7 +1437,7 @@
             const n = parseInt(num);
             const color = n === 0 ? 'gold' : COLORS[n];
             const intensity = Math.min(100, Math.round((count / maxFreq) * 100));
-            return `<span class="num-badge ${color}" style="width:20px;height:20px;font-size:7px;opacity:${0.3 + (intensity * 0.7 / 100)};border-color:rgba(255,215,0,${intensity/100});">${n}</span>`;
+            return `<span class="num-badge ${color}" style="width:18px;height:18px;font-size:6px;opacity:${0.3 + (intensity * 0.7 / 100)};border-color:rgba(255,215,0,${intensity/100});">${n}</span>`;
         }).join('');
     }
 
@@ -1331,9 +1467,10 @@
         updateHeatmap();
         displayBouncePredictions(bounceResults);
         displayBouncePhysics(bounceResults);
-        displayTopPredictions(aiPredictions);
+        displayTopPredictionsTable(aiPredictions);
         displayBetSuggestions(betSuggestions);
         displayAISuggestions(aiPredictions);
+        displayAINumberList(aiPredictions);
         displaySignalIndicatorsOnWheel(bounceResults);
         displayBounceDots(bounceResults);
         updateSeedDisplay();
@@ -1363,13 +1500,14 @@
         spinCountEl.textContent = '0';
         hotNumber.textContent = '-';
         coldNumber.textContent = '-';
-        historyDisplay.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
-        heatmapDisplay.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
-        bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[5px]">-</span>';
+        historyDisplay.innerHTML = '<span class="text-gray-600 text-[4px]">-</span>';
+        heatmapDisplay.innerHTML = '<span class="text-gray-600 text-[4px]">-</span>';
+        bouncePredictionsEl.innerHTML = '<span class="text-gray-600 text-[4px]">-</span>';
         bouncePhysicsEl.innerHTML = '<span class="text-gray-600">-</span>';
-        topPredictionsEl.innerHTML = '<span class="text-gray-600 text-[6px] text-center">-</span>';
+        topPredictionsTable.innerHTML = '<span class="text-gray-600 text-[5px] text-center col-span-full">-</span>';
         betSuggestionsEl.innerHTML = '<span class="text-gray-600">-</span>';
         aiSuggestionsEl.innerHTML = '<span class="text-gray-600">-</span>';
+        aiNumberList.innerHTML = '<span class="text-gray-600">-</span>';
         signalIndicatorsEl.innerHTML = '';
         bounceDotsEl.innerHTML = '';
         wheel.style.transform = 'rotate(0deg)';
@@ -1379,7 +1517,7 @@
         directionDisplay.className = 'direction-indicator stable';
         speedDisplay.textContent = '0s';
         aiStatus.textContent = '🧠 IDLE';
-        aiStatus.className = 'text-[6px] text-gray-500';
+        aiStatus.className = 'text-[5px] text-gray-500';
         strategyProgress.style.width = '0%';
         strategyCount.textContent = '0/300';
         aiMemoryEl.textContent = '0';
